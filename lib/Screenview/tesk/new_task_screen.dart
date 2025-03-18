@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_management_app/Screenview/Components/background_widget.dart';
 import 'package:task_management_app/Screenview/Components/summary_card.dart';
 import 'package:task_management_app/Screenview/Components/task_card_widget.dart';
 
@@ -17,28 +18,30 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         onPressed: () {},
         child: Icon(Icons.add),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            buildSummarySection(),
-            ListView.separated(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return TaskCardWidget(
-                  title: "new task title",
-                  description: "new task description",
-                  date: "20/02/2025",
-                  buttonName: "new",
-                  buttonColors: Colors.blue,
-                );
-              },
-              separatorBuilder: (context, index) => SizedBox(
-                height: 8,
-              ),
-            )
-          ],
+      body: BackgroundWidget(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              buildSummarySection(),
+              ListView.separated(
+                primary: false,
+                shrinkWrap: true,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return TaskCardWidget(
+                    title: "new task title",
+                    description: "new task description",
+                    date: "20/02/2025",
+                    buttonName: "new",
+                    buttonColors: Colors.blue,
+                  );
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 8,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

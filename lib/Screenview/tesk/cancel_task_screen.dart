@@ -15,7 +15,7 @@ class _CancelTaskScreenState extends State<CancelTaskScreen> {
       body: ListView.separated(
         //primary: false,
         // shrinkWrap: true,
-        itemCount: 5,
+        itemCount: 50,
         itemBuilder: (context, index) {
           return TaskCardWidget(
             title: "cancel task title",

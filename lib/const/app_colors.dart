@@ -10,4 +10,6 @@ class AppColors {
   static const colorDarkBlue = Color.fromRGBO(44, 62, 80, 1.0);
   static const colorLightGray = Color.fromRGBO(135, 142, 150, 1.0);
   static const colorLight = Color.fromRGBO(211, 211, 211, 1.0);
+
+  static const submitButton = colorGreen;
 }

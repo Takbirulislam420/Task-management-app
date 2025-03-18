@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/splash_screen.dart';
+import 'package:task_management_app/const/app_colors.dart';
+import 'package:task_management_app/const/app_string.dart';
 
 class TaskManagementApp extends StatelessWidget {
   const TaskManagementApp({super.key});
@@ -9,7 +11,7 @@ class TaskManagementApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: AppString.appName,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorSchemeSeed: Colors.amber,
@@ -23,7 +25,7 @@ class TaskManagementApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
               fixedSize: Size.fromWidth(double.maxFinite),
-              backgroundColor: Colors.green,
+              backgroundColor: AppColors.submitButton,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),

@@ -5,6 +5,7 @@ import 'package:task_management_app/Screenview/onboarding.dart/forget_password_v
 import 'package:task_management_app/Screenview/onboarding.dart/registation_Screen.dart';
 import 'package:task_management_app/Screenview/tesk/home_screen.dart';
 import 'package:task_management_app/const/app_int.dart';
+import 'package:task_management_app/const/app_string.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -33,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Get Started with",
+                  AppString.getStart,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 SizedBox(
@@ -45,8 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     //labelText: 'Email',
-                    hintText: 'Enter your email',
-                    hintStyle: TextStyle(height: 1.5),
+                    hintText: AppString.emailHintText,
                   ),
                 ),
                 SizedBox(
@@ -60,8 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.start,
                   decoration: InputDecoration(
                       //labelText: 'Password',
-                      hintText: 'Enter your password',
-                      hintStyle: TextStyle(height: 1.5),
+                      hintText: AppString.passwordHintText,
                       suffixIcon: IconButton(
                         onPressed: () {
                           setState(() {
@@ -79,7 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 15,
                 ),
                 ElevatedButton(
-                    onPressed: _ontapLogInButton, child: Text("Log in")),
+                    onPressed: _ontapLogInButton,
+                    child: Text(AppString.loginButtonText)),
                 SizedBox(
                   height: 25,
                 ),
@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextButton(
                           onPressed: _ontapForgetPasswordButton,
                           child: Text(
-                            "forget password?",
+                            AppString.forgetPassword,
                             style: TextStyle(color: Colors.black54),
                             textAlign: TextAlign.center,
                           )),
@@ -100,9 +100,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14),
                               children: [
-                            TextSpan(text: "Don't have account?"),
+                            TextSpan(text: AppString.dontHaveAccount),
                             TextSpan(
-                              text: "Sing up",
+                              text: AppString.singUp,
                               style: TextStyle(
                                   color: Colors.green,
                                   fontWeight: FontWeight.bold),
