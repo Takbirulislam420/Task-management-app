@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
+enum TaskStatus { newPage, progressPage, complatePage, cancelledPage }
+
 // ignore: must_be_immutable
 class TaskCardWidget extends StatelessWidget {
   String title;
   String description;
   String date;
   String buttonName;
-  Color buttonColors;
+  TaskStatus taskStatus;
   TaskCardWidget({
     required this.title,
     required this.description,
     required this.date,
     required this.buttonName,
-    required this.buttonColors,
+    required this.taskStatus,
     super.key,
   });
 
@@ -41,7 +43,7 @@ class TaskCardWidget extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  backgroundColor: buttonColors,
+                  backgroundColor: _getChipButtonColor(),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
@@ -56,5 +58,35 @@ class TaskCardWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color _getChipButtonColor() {
+    late Color color;
+
+    switch (taskStatus) {
+      case TaskStatus.newPage:
+        color = Colors.green;
+      case TaskStatus.progressPage:
+        color = Colors.amber;
+      case TaskStatus.complatePage:
+        color = Colors.blueAccent;
+      case TaskStatus.cancelledPage:
+        color = Colors.red;
+    }
+    return color;
+
+    // Different way
+    // if (taskStatus == TaskStatus.newPage) {
+    //   return Colors.blue;
+    // }else if(taskStatus == TaskStatus.progressPage){
+    //       return Colors.black;
+    // }
+    // else if(taskStatus == TaskStatus.progressPage){
+    //       return Colors.amber;
+    // }else if(taskStatus == TaskStatus.progressPage){
+    //       return Colors.green;
+    // }else{
+    //   return Colors.white;
+    // }
   }
 }

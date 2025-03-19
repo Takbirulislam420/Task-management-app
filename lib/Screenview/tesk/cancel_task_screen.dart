@@ -22,7 +22,7 @@ class _CancelTaskScreenState extends State<CancelTaskScreen> {
             description: "cancel task description",
             date: "23/02/2025",
             buttonName: "cancel",
-            buttonColors: Colors.redAccent,
+            taskStatus: TaskStatus.cancelledPage,
           );
         },
         separatorBuilder: (context, index) => SizedBox(

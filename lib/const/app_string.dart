@@ -7,4 +7,9 @@ class AppString {
   static final forgetPassword = "Forget password?";
   static final dontHaveAccount = "Don't have account?";
   static final singUp = "Sing Up";
+  static final submit = "Submit";
+  static final addNewTask = "Add new task";
+  static final title = "Title";
+  static final description = "description";
+  static final updateProfile = "Update your profile";
 }

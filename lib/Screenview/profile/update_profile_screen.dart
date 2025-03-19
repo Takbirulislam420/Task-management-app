@@ -1,17 +1,17 @@
-// ignore: file_names
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:task_management_app/Screenview/Components/app_bar_component.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/const/app_int.dart';
+import 'package:task_management_app/const/app_string.dart';
 
-class RegistationScreen extends StatefulWidget {
-  const RegistationScreen({super.key});
+class UpdateProfileScreen extends StatefulWidget {
+  const UpdateProfileScreen({super.key});
 
   @override
-  State<RegistationScreen> createState() => _RegistationScreenState();
+  State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
 }
 
-class _RegistationScreenState extends State<RegistationScreen> {
+class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _fnameController = TextEditingController();
   final TextEditingController _lnameController = TextEditingController();
@@ -23,6 +23,9 @@ class _RegistationScreenState extends State<RegistationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBarComponent(
+        fromProfileUpdate: true,
+      ),
       body: BackgroundComponent(
           child: Container(
         alignment: Alignment.center,
@@ -36,11 +39,15 @@ class _RegistationScreenState extends State<RegistationScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Join with us",
+                    AppString.updateProfile,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 25,
+                  ),
+                  _photoPicker(),
+                  SizedBox(
+                    height: 10,
                   ),
                   TextFormField(
                     textInputAction: TextInputAction.next,
@@ -110,33 +117,11 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     height: 15,
                   ),
                   ElevatedButton(
-                      onPressed: _onTapSubmitbuttom, child: Text("Sign up")),
+                      onPressed: _onTapSubmitbuttom,
+                      child: Text(AppString.submit)),
                   SizedBox(
                     height: 25,
                   ),
-                  Center(
-                    child: Column(
-                      children: [
-                        RichText(
-                            text: TextSpan(
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14),
-                                children: [
-                              TextSpan(text: "have you account?"),
-                              TextSpan(
-                                text: " Sing in",
-                                style: TextStyle(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.bold),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = _ontapSinginButton,
-                              ),
-                            ]))
-                      ],
-                    ),
-                  )
                 ],
               ),
             ),
@@ -146,11 +131,38 @@ class _RegistationScreenState extends State<RegistationScreen> {
     );
   }
 
-  void _onTapSubmitbuttom() {}
-
-  void _ontapSinginButton() {
-    Navigator.pop(context);
+  void _onTapPhotoPicker() {}
+  Widget _photoPicker() {
+    return GestureDetector(
+      onTap: _onTapPhotoPicker,
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(8)),
+        child: Row(
+          children: [
+            Container(
+              height: 50,
+              width: 80,
+              decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      bottomLeft: Radius.circular(8))),
+              alignment: Alignment.center,
+              child: Text("Photo"),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Text("Select your picture"),
+          ],
+        ),
+      ),
+    );
   }
+
+  void _onTapSubmitbuttom() {}
 
   @override
   void dispose() {

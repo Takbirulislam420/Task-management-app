@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:task_management_app/Screenview/Components/background_widget.dart';
+import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/forget_password_verify_email_screen.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/registation_Screen.dart';
 import 'package:task_management_app/Screenview/tesk/home_screen.dart';
@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BackgroundWidget(
+      body: BackgroundComponent(
           child: Container(
         alignment: Alignment.center,
         padding: EdgeInsets.all(AppInt.padding),

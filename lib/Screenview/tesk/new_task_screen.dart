@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:task_management_app/Screenview/Components/background_widget.dart';
+import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/summary_card.dart';
 import 'package:task_management_app/Screenview/Components/task_card_widget.dart';
+import 'package:task_management_app/Screenview/tesk/add_new_task_screen.dart';
 
 class NewTaskScreen extends StatefulWidget {
   const NewTaskScreen({super.key});
@@ -15,10 +16,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        backgroundColor: Colors.green,
+        onPressed: _onPressFloatingButton,
         child: Icon(Icons.add),
       ),
-      body: BackgroundWidget(
+      body: BackgroundComponent(
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -33,7 +35,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     description: "new task description",
                     date: "20/02/2025",
                     buttonName: "new",
-                    buttonColors: Colors.blue,
+                    taskStatus: TaskStatus.newPage,
                   );
                 },
                 separatorBuilder: (context, index) => SizedBox(
@@ -44,6 +46,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _onPressFloatingButton() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddNewTaskScreen()),
     );
   }
 

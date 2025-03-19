@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_management_app/Screenview/Components/background_widget.dart';
+import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/task_card_widget.dart';
 
 class ProgressTaskScreen extends StatefulWidget {
@@ -13,7 +13,7 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BackgroundWidget(
+      body: BackgroundComponent(
         child: ListView.separated(
           //primary: false,
           // shrinkWrap: true,
@@ -24,7 +24,7 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
               description: "Progress task description",
               date: "25/02/2025",
               buttonName: "Progress",
-              buttonColors: Colors.amber,
+              taskStatus: TaskStatus.progressPage,
             );
           },
           separatorBuilder: (context, index) => SizedBox(

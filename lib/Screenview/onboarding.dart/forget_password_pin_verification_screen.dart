@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/reset_password_screen.dart';
-import 'package:task_management_app/Screenview/Components/background_widget.dart';
 import 'package:task_management_app/const/app_int.dart';
 
 class ForgetPasswordPinVerificationScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _ForgetPasswordPinVerificationScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BackgroundWidget(
+      body: BackgroundComponent(
           child: Container(
         alignment: Alignment.center,
         padding: EdgeInsets.all(AppInt.padding),

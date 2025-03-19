@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:task_management_app/const/app_image_path.dart';
 
-class BackgroundWidget extends StatelessWidget {
-  const BackgroundWidget({super.key, required this.child});
+class BackgroundComponent extends StatelessWidget {
+  const BackgroundComponent({super.key, required this.child});
 
   final Widget child;
 

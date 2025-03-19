@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:task_management_app/Screenview/Components/background_widget.dart';
+import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
 import 'package:task_management_app/const/app_image_path.dart';
 
@@ -35,7 +35,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BackgroundWidget(
+        body: BackgroundComponent(
             child: Center(
       child: SvgPicture.asset(AppImagePath.logoImage),
     )));

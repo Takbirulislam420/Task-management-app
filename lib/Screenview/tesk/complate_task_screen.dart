@@ -22,7 +22,7 @@ class _ComplateTaskScreenState extends State<ComplateTaskScreen> {
             description: "Complate task description",
             date: "26/02/2025",
             buttonName: "Complate",
-            buttonColors: Colors.green,
+            taskStatus: TaskStatus.complatePage,
           );
         },
         separatorBuilder: (context, index) => SizedBox(
