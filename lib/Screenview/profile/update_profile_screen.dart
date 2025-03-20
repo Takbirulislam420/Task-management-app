@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_management_app/Screenview/Components/app_bar_component.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
+import 'package:task_management_app/Screenview/tesk/home_screen.dart';
 import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/const/app_string.dart';
 
@@ -117,7 +118,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     height: 15,
                   ),
                   ElevatedButton(
-                      onPressed: _onTapSubmitbuttom,
+                      onPressed: _ontapSubmitButton,
                       child: Text(AppString.submit)),
                   SizedBox(
                     height: 25,
@@ -162,7 +163,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     );
   }
 
-  void _onTapSubmitbuttom() {}
+  void _ontapSubmitButton() {
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => HomeScreen()), (pre) => false);
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => HomeScreen()),
+    // );
+  }
 
   @override
   void dispose() {
