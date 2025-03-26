@@ -1,11 +1,17 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
+import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
+import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/forget_password_verify_email_screen.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/registation_Screen.dart';
 import 'package:task_management_app/Screenview/tesk/home_screen.dart';
 import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/const/app_string.dart';
+import 'package:task_management_app/data/api_services/network_client.dart';
+import 'package:task_management_app/data/api_services/network_response.dart';
+import 'package:task_management_app/data/utils/api_urls.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,9 +22,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   // To toggle password visibility
   bool _isObscured = true;
+  bool _loginInPregree = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: EdgeInsets.all(AppInt.padding),
         child: SingleChildScrollView(
           child: Form(
-            key: _formkey,
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -48,6 +56,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     //labelText: 'Email',
                     hintText: AppString.emailHintText,
                   ),
+                  validator: (String? value) {
+                    String email = value?.trim() ?? '';
+                    if (EmailValidator.validate(email) == false) {
+                      return "Enter your Email";
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
                 SizedBox(
                   height: 10,
@@ -73,13 +89,25 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Colors.grey,
                         ),
                       )),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (String? value) {
+                    if ((value?.isEmpty ?? true) || (value!.length < 6)) {
+                      return "Enter your Password";
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
                 SizedBox(
                   height: 15,
                 ),
-                ElevatedButton(
-                    onPressed: _ontapLogInButton,
-                    child: Text(AppString.loginButtonText)),
+                Visibility(
+                  visible: _loginInPregree == false,
+                  replacement: CenterCircularProgressIndecator(),
+                  child: ElevatedButton(
+                      onPressed: _ontapLogInButton,
+                      child: Text(AppString.loginButtonText)),
+                ),
                 SizedBox(
                   height: 25,
                 ),
@@ -122,12 +150,42 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _ontapLogInButton() {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => HomeScreen()), (pre) => false);
+    if (_formKey.currentState!.validate()) {
+      _logInUser();
+    }
+    // Navigator.pushAndRemoveUntil(context,
+    //     MaterialPageRoute(builder: (context) => HomeScreen()), (pre) => false);
     // Navigator.push(
     //   context,
     //   MaterialPageRoute(builder: (context) => HomeScreen()),
     // );
+  }
+
+  Future<void> _logInUser() async {
+    _loginInPregree = true;
+    setState(() {});
+    Map<String, dynamic> requestBody = {
+      "email": _emailController.text.trim(),
+      "password": _passwordController.text,
+    };
+
+    NetworkResponse response = await NetworkClient.postRequest(
+        url: ApiUrls.userLogin, body: requestBody);
+    _loginInPregree = false;
+    setState(() {});
+
+    if (response.isSuccess) {
+      // ignore: use_build_context_synchronously
+      // showSnackbarMessage(context, "Login successfull");
+      Navigator.push(
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } else {
+      // ignore: use_build_context_synchronously
+      showSnackbarMessage(context, response.errorMessage, true);
+    }
   }
 
   void _ontapSingUpButton() {

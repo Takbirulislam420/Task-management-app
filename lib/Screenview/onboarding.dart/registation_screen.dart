@@ -1,8 +1,14 @@
 // ignore: file_names
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
+import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
+import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/const/app_int.dart';
+import 'package:task_management_app/data/api_services/network_client.dart';
+import 'package:task_management_app/data/api_services/network_response.dart';
+import 'package:task_management_app/data/utils/api_urls.dart';
 
 class RegistationScreen extends StatefulWidget {
   const RegistationScreen({super.key});
@@ -19,7 +25,9 @@ class _RegistationScreenState extends State<RegistationScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmpasswordController =
       TextEditingController();
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+  bool _registationInPregree = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +35,8 @@ class _RegistationScreenState extends State<RegistationScreen> {
           child: Container(
         alignment: Alignment.center,
         child: Form(
-          key: _formkey,
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(AppInt.padding),
@@ -49,6 +58,14 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     decoration: InputDecoration(
                       hintText: "Email",
                     ),
+                    validator: (String? value) {
+                      String email = value?.trim() ?? '';
+                      if (EmailValidator.validate(email) == false) {
+                        return "Enter your Email";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -60,6 +77,14 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     decoration: InputDecoration(
                       hintText: "First name",
                     ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (String? value) {
+                      if (value?.trim().isEmpty ?? true) {
+                        return "Enter your first name";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -71,6 +96,14 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     decoration: InputDecoration(
                       hintText: "Last name",
                     ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (String? value) {
+                      if (value?.trim().isEmpty ?? true) {
+                        return "Enter your last name";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -82,6 +115,14 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     decoration: InputDecoration(
                       hintText: "mobile",
                     ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (String? value) {
+                      if (value?.trim().isEmpty ?? true) {
+                        return "Enter your Mobile";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -93,6 +134,14 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     decoration: InputDecoration(
                       hintText: "Password",
                     ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (String? value) {
+                      if ((value?.isEmpty ?? true) || (value!.length < 6)) {
+                        return "Enter your Password";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -105,12 +154,24 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     decoration: InputDecoration(
                       hintText: "Confirm password",
                     ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (String? value) {
+                      if ((value?.isEmpty ?? true) || (value!.length < 6)) {
+                        return "Enter your Password";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                   SizedBox(
                     height: 15,
                   ),
-                  ElevatedButton(
-                      onPressed: _onTapSubmitbuttom, child: Text("Sign up")),
+                  Visibility(
+                    visible: _registationInPregree == false,
+                    replacement: CenterCircularProgressIndecator(),
+                    child: ElevatedButton(
+                        onPressed: _onTapSubmitbuttom, child: Text("Sign up")),
+                  ),
                   SizedBox(
                     height: 25,
                   ),
@@ -146,7 +207,36 @@ class _RegistationScreenState extends State<RegistationScreen> {
     );
   }
 
-  void _onTapSubmitbuttom() {}
+  void _onTapSubmitbuttom() {
+    if (_formKey.currentState!.validate()) {
+      _registerUser();
+    }
+  }
+
+  Future<void> _registerUser() async {
+    _registationInPregree = true;
+    setState(() {});
+    Map<String, dynamic> requestBody = {
+      "email": _emailController.text.trim(),
+      "firstName": _fnameController.text.trim(),
+      "lastName": _lnameController.text.trim(),
+      "mobile": _phoneController.text.trim(),
+      "password": _passwordController.text,
+    };
+
+    NetworkResponse response = await NetworkClient.postRequest(
+        url: ApiUrls.userRegistation, body: requestBody);
+    _registationInPregree = false;
+    setState(() {});
+
+    if (response.isSuccess) {
+      // ignore: use_build_context_synchronously
+      showSnackbarMessage(context, "Registation successfull");
+    } else {
+      // ignore: use_build_context_synchronously
+      showSnackbarMessage(context, response.errorMessage, true);
+    }
+  }
 
   void _ontapSinginButton() {
     Navigator.pop(context);

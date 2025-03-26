@@ -22,8 +22,12 @@ class NetworkClient {
             statusCode: response.statusCode,
             data: decodedJson);
       } else {
+        final decodedJson = jsonDecode(response.body);
+        String errorMessage = decodedJson['data'] ?? 'Something wrong';
         return NetworkResponse(
-            isSuccess: false, statusCode: response.statusCode);
+            isSuccess: false,
+            statusCode: response.statusCode,
+            errorMessage: errorMessage);
       }
     } catch (catchError) {
       _pastRequestLog(url, -1);
@@ -53,8 +57,12 @@ class NetworkClient {
             statusCode: response.statusCode,
             data: decodedJson);
       } else {
+        final decodedJson = jsonDecode(response.body);
+        String errorMessage = decodedJson['data'] ?? 'Something wrong';
         return NetworkResponse(
-            isSuccess: false, statusCode: response.statusCode);
+            isSuccess: false,
+            statusCode: response.statusCode,
+            errorMessage: errorMessage);
       }
     } catch (catchError) {
       _pastRequestLog(url, -1, errorMessage: catchError.toString());
