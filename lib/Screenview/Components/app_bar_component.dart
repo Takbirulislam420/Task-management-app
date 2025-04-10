@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:task_management_app/Screenview/controller/auth_controller.dart';
+import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
 import 'package:task_management_app/Screenview/profile/update_profile_screen.dart';
 
 class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
@@ -33,17 +35,19 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Takbirul islam",
+                    AuthController.userModel?.firstName ?? "Unknown",
                     style: textTheme.bodyLarge?.copyWith(color: Colors.white),
                   ),
                   Text(
-                    "Takbirulislam420@gmail.com",
+                    AuthController.userModel?.email ?? "UnknownEmail",
                     style: textTheme.bodySmall?.copyWith(color: Colors.white),
                   )
                 ],
               ),
             ),
-            IconButton(onPressed: () {}, icon: Icon(Icons.logout))
+            IconButton(
+                onPressed: () => _onTapLogOutButton(context),
+                icon: Icon(Icons.logout))
           ],
         ),
       ),
@@ -57,6 +61,13 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
       context,
       MaterialPageRoute(builder: (context) => UpdateProfileScreen()),
     );
+  }
+
+  Future<void> _onTapLogOutButton(BuildContext context) async {
+    await AuthController.clearUserData();
+    // ignore: use_build_context_synchronously
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => LoginScreen()), (pre) => false);
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
+import 'package:task_management_app/Screenview/controller/auth_controller.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/forget_password_verify_email_screen.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/registation_Screen.dart';
 import 'package:task_management_app/Screenview/tesk/home_screen.dart';
@@ -11,6 +12,7 @@ import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/const/app_string.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
+import 'package:task_management_app/data/model/login_model.dart';
 import 'package:task_management_app/data/utils/api_urls.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   // To toggle password visibility
   bool _isObscured = true;
-  bool _loginInPregree = false;
+  bool _loginInProgress = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 15,
                 ),
                 Visibility(
-                  visible: _loginInPregree == false,
+                  visible: _loginInProgress == false,
                   replacement: CenterCircularProgressIndecator(),
                   child: ElevatedButton(
                       onPressed: _ontapLogInButton,
@@ -162,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _logInUser() async {
-    _loginInPregree = true;
+    _loginInProgress = true;
     setState(() {});
     Map<String, dynamic> requestBody = {
       "email": _emailController.text.trim(),
@@ -171,11 +173,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     NetworkResponse response = await NetworkClient.postRequest(
         url: ApiUrls.userLogin, body: requestBody);
-    _loginInPregree = false;
+    _loginInProgress = false;
     setState(() {});
 
     if (response.isSuccess) {
-      // ignore: use_build_context_synchronously
+      LoginModel loginModel = LoginModel.fromJson(response.data!);
+      AuthController.saveUserInformation(
+          loginModel.token, loginModel.userModel);
       // showSnackbarMessage(context, "Login successfull");
       Navigator.push(
         // ignore: use_build_context_synchronously
