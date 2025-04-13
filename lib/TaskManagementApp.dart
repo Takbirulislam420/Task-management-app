@@ -5,17 +5,22 @@ import 'package:task_management_app/Screenview/onboarding.dart/splash_screen.dar
 import 'package:task_management_app/const/app_colors.dart';
 import 'package:task_management_app/const/app_string.dart';
 
-class TaskManagementApp extends StatelessWidget {
+class TaskManagementApp extends StatefulWidget {
   const TaskManagementApp({super.key});
 
+  static final GlobalKey<NavigatorState> navigatorkey =
+      GlobalKey<NavigatorState>();
+
+  @override
+  State<TaskManagementApp> createState() => _TaskManagementAppState();
+}
+
+class _TaskManagementAppState extends State<TaskManagementApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: TaskManagementApp.navigatorkey,
       title: AppString.appName,
-      
-
-
-
 
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

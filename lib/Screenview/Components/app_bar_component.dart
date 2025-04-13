@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:task_management_app/Screenview/controller/auth_controller.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
@@ -26,6 +28,10 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
           children: [
             CircleAvatar(
               radius: 20,
+              backgroundImage: _shouldShowImage(AuthController.userModel?.photo)
+                  ? MemoryImage(
+                      base64Decode(AuthController.userModel?.photo ?? ""))
+                  : null,
             ),
             SizedBox(
               width: 8,
@@ -35,7 +41,7 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    AuthController.userModel?.firstName ?? "Unknown",
+                    AuthController.userModel?.fullName ?? "Unknown",
                     style: textTheme.bodyLarge?.copyWith(color: Colors.white),
                   ),
                   Text(
@@ -52,6 +58,10 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
     );
+  }
+
+  bool _shouldShowImage(String? photo) {
+    return photo != null && photo.isNotEmpty;
   }
 
   void _onTapProfileUpdateScreen(BuildContext context) {

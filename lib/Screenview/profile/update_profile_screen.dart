@@ -1,9 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:task_management_app/Screenview/Components/app_bar_component.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
-import 'package:task_management_app/Screenview/tesk/home_screen.dart';
+import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
+import 'package:task_management_app/Screenview/controller/auth_controller.dart';
 import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/const/app_string.dart';
+import 'package:task_management_app/data/api_services/network_client.dart';
+import 'package:task_management_app/data/api_services/network_response.dart';
+import 'package:task_management_app/data/utils/api_urls.dart';
+import '../../data/model/user_model.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -18,9 +25,22 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final TextEditingController _lnameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmpasswordController =
-      TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+
+  final ImagePicker _picker = ImagePicker();
+  XFile? _pickedImage;
+  bool _updateProfileInPregree = false;
+
+  @override
+  void initState() {
+    UserModel userModel = AuthController.userModel!;
+    _emailController.text = userModel.email;
+    _fnameController.text = userModel.firstName;
+    _lnameController.text = userModel.lastName;
+    _phoneController.text = userModel.mobile;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +51,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           child: Container(
         alignment: Alignment.center,
         child: Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formkey,
           child: SingleChildScrollView(
             child: Padding(
@@ -54,6 +75,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
                     controller: _emailController,
+                    enabled: false,
                     decoration: InputDecoration(
                       hintText: "Email",
                     ),
@@ -68,6 +90,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     decoration: InputDecoration(
                       hintText: "First name",
                     ),
+                    validator: (String? value) {
+                      if (value?.trim().isEmpty ?? true) {
+                        return 'Enter your first name';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -79,6 +107,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     decoration: InputDecoration(
                       hintText: "Last name",
                     ),
+                    validator: (String? value) {
+                      if (value?.trim().isEmpty ?? true) {
+                        return 'Enter your last name';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -90,36 +124,35 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     decoration: InputDecoration(
                       hintText: "mobile",
                     ),
+                    validator: (String? value) {
+                      if (value?.trim().isEmpty ?? true) {
+                        return 'Enter your phone number';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   TextFormField(
                     keyboardType: TextInputType.visiblePassword,
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.done,
                     controller: _passwordController,
+                    obscureText: true,
                     decoration: InputDecoration(
                       hintText: "Password",
                     ),
                   ),
                   SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    obscureText: true,
-                    keyboardType: TextInputType.visiblePassword,
-                    textInputAction: TextInputAction.done,
-                    controller: _confirmpasswordController,
-                    decoration: InputDecoration(
-                      hintText: "Confirm password",
-                    ),
-                  ),
-                  SizedBox(
                     height: 15,
                   ),
-                  ElevatedButton(
-                      onPressed: _ontapSubmitButton,
-                      child: Text(AppString.submit)),
+                  Visibility(
+                    visible: _updateProfileInPregree == false,
+                    replacement: Center(child: CircularProgressIndicator()),
+                    child: ElevatedButton(
+                        onPressed: _ontapSubmitButton,
+                        child: Text(AppString.submit)),
+                  ),
                   SizedBox(
                     height: 25,
                   ),
@@ -132,7 +165,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     );
   }
 
-  void _onTapPhotoPicker() {}
+  Future<void> _onTapPhotoPicker() async {
+    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      _pickedImage = image;
+      setState(() {});
+    }
+  }
+
   Widget _photoPicker() {
     return GestureDetector(
       onTap: _onTapPhotoPicker,
@@ -156,7 +196,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             SizedBox(
               width: 5,
             ),
-            Text("Select your picture"),
+            Text(_pickedImage?.name ?? "Select your picture"),
           ],
         ),
       ),
@@ -164,12 +204,46 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   void _ontapSubmitButton() {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => HomeScreen()), (pre) => false);
+    _updateUser();
+    // Navigator.pushAndRemoveUntil(context,
+    //     MaterialPageRoute(builder: (context) => HomeScreen()), (pre) => false);
     // Navigator.push(
     //   context,
     //   MaterialPageRoute(builder: (context) => HomeScreen()),
     // );
+  }
+
+  Future<void> _updateUser() async {
+    _updateProfileInPregree = true;
+    setState(() {});
+    Map<String, dynamic> requestBody = {
+      "email": _emailController.text.trim(),
+      "firstName": _fnameController.text.trim(),
+      "lastName": _lnameController.text.trim(),
+      "mobile": _phoneController.text.trim(),
+    };
+    if (_passwordController.text.isNotEmpty) {
+      requestBody["password"] = _passwordController.text;
+    }
+    if (_pickedImage != null) {
+      List<int> imageBytes = await _pickedImage!.readAsBytes();
+      String encodeImage = base64Encode(imageBytes);
+      requestBody['photo'] = encodeImage;
+    }
+
+    NetworkResponse response = await NetworkClient.postRequest(
+        url: ApiUrls.userUpdateProfile, body: requestBody);
+    _updateProfileInPregree = false;
+    setState(() {});
+
+    if (response.isSuccess) {
+      _passwordController.clear();
+      // ignore: use_build_context_synchronously
+      showSnackbarMessage(context, "your profile updated successfull");
+    } else {
+      // ignore: use_build_context_synchronously
+      showSnackbarMessage(context, response.errorMessage, true);
+    }
   }
 
   @override
@@ -179,7 +253,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     _lnameController.dispose();
     _phoneController.dispose();
     _passwordController.dispose();
-    _confirmpasswordController.dispose();
     super.dispose();
   }
 }

@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
+import 'package:task_management_app/Screenview/controller/auth_controller.dart';
+import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
+import 'package:task_management_app/TaskManagementApp.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
 
 class NetworkClient {
@@ -10,8 +14,9 @@ class NetworkClient {
   static Future<NetworkResponse> getRequest({required String url}) async {
     try {
       Uri uri = Uri.parse(url);
-      _preRequestLog(url);
-      Response response = await get(uri);
+      Map<String, String> header = {'Token': AuthController.token ?? ''};
+      _preRequestLog(url, header);
+      Response response = await get(uri, headers: header);
       _pastRequestLog(url, response.statusCode,
           headers: response.headers, responseBody: response.body);
 
@@ -21,6 +26,12 @@ class NetworkClient {
             isSuccess: true,
             statusCode: response.statusCode,
             data: decodedJson);
+      } else if (response.statusCode == 401) {
+        _moveToLoginScreen();
+        return NetworkResponse(
+          isSuccess: false,
+          statusCode: response.statusCode,
+        );
       } else {
         final decodedJson = jsonDecode(response.body);
         String errorMessage = decodedJson['data'] ?? 'Something wrong';
@@ -44,10 +55,14 @@ class NetworkClient {
       {required String url, Map<String, dynamic>? body}) async {
     try {
       Uri uri = Uri.parse(url);
-      _preRequestLog(url, body: body);
-      Response response = await post(uri,
-          headers: {'Content-type': 'Application/json'},
-          body: jsonEncode(body));
+      Map<String, String> headers = {
+        'Content-type': 'Application/json',
+        'Accept': 'application/json',
+        'Token': AuthController.token ?? " "
+      };
+      _preRequestLog(url, headers, body: body);
+      Response response =
+          await post(uri, headers: headers, body: jsonEncode(body));
       _pastRequestLog(url, response.statusCode,
           headers: response.headers, responseBody: response.body);
       if (response.statusCode == 200) {
@@ -56,6 +71,12 @@ class NetworkClient {
             isSuccess: true,
             statusCode: response.statusCode,
             data: decodedJson);
+      } else if (response.statusCode == 401) {
+        _moveToLoginScreen();
+        return NetworkResponse(
+          isSuccess: false,
+          statusCode: response.statusCode,
+        );
       } else {
         final decodedJson = jsonDecode(response.body);
         String errorMessage = decodedJson['data'] ?? 'Something wrong';
@@ -74,8 +95,9 @@ class NetworkClient {
   }
   // From here End post request
 
-  static _preRequestLog(String url, {Map<String, dynamic>? body}) {
-    _logger.i("Url => $url\n"
+  static _preRequestLog(String url, Map<String, dynamic> headers,
+      {Map<String, dynamic>? body}) {
+    _logger.i("Url => $url\n Header:$headers \n"
         "Body => $body\n"); //
   }
 
@@ -92,5 +114,11 @@ class NetworkClient {
           "Headers => $headers\n"
           "ResponseBody => $responseBody\n");
     }
+  }
+
+  static Future<void> _moveToLoginScreen() async {
+    await AuthController.clearUserData();
+    Navigator.pushAndRemoveUntil(TaskManagementApp.navigatorkey.currentContext!,
+        MaterialPageRoute(builder: (context) => LoginScreen()), (pre) => false);
   }
 }
