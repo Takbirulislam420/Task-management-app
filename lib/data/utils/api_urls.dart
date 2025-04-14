@@ -4,4 +4,5 @@ class ApiUrls {
   static final String userLogin = "$_baseUrls/Login";
   static final String userUpdateProfile = "$_baseUrls/ProfileUpdate";
   static final String userProfileDetails = "$_baseUrls/ProfileDetails";
+  static final String createTaskUrl = "$_baseUrls/createTask";
 }
