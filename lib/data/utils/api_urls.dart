@@ -5,4 +5,5 @@ class ApiUrls {
   static final String userUpdateProfile = "$_baseUrls/ProfileUpdate";
   static final String userProfileDetails = "$_baseUrls/ProfileDetails";
   static final String createTaskUrl = "$_baseUrls/createTask";
+  static final String taskStatusCountUrl = "$_baseUrls/taskStatusCount";
 }

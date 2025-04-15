@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SummaryCard extends StatelessWidget {
   final String title;
-  final String count;
+  final int count;
   const SummaryCard({
     super.key,
     required this.title,
@@ -19,7 +19,7 @@ class SummaryCard extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              count,
+              count.toString(),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             Text(title)
