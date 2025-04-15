@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
+import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/Components/task_card_widget.dart';
+import 'package:task_management_app/data/api_services/network_client.dart';
+import 'package:task_management_app/data/api_services/network_response.dart';
+import 'package:task_management_app/data/model/task_list_model.dart';
+import 'package:task_management_app/data/model/task_model.dart';
+import 'package:task_management_app/data/utils/api_urls.dart';
 
 class ComplateTaskScreen extends StatefulWidget {
   const ComplateTaskScreen({super.key});
@@ -9,26 +16,57 @@ class ComplateTaskScreen extends StatefulWidget {
 }
 
 class _ComplateTaskScreenState extends State<ComplateTaskScreen> {
+  bool _getComplatedTaskListInProgress = false;
+  List<TaskModel> _taskList = [];
+
+  @override
+  void initState() {
+    _getAllComplatedTaskList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.separated(
-        //primary: false,
-        // shrinkWrap: true,
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return TaskCardWidget(
-            title: "Complate task title",
-            description: "Complate task description",
-            date: "26/02/2025",
-            buttonName: "Complate",
-            taskStatus: TaskStatus.complatePage,
-          );
-        },
-        separatorBuilder: (context, index) => SizedBox(
-          height: 8,
+      body: Visibility(
+        visible: _getComplatedTaskListInProgress == false,
+        replacement: CenterCircularProgressIndecator(),
+        child: ListView.separated(
+          //primary: false,
+          // shrinkWrap: true,
+          itemCount: _taskList.length,
+          itemBuilder: (context, index) {
+            return TaskCardWidget(
+              title: _taskList[index].title,
+              description: _taskList[index].description,
+              date: "Date: ${_taskList[index].createDate}",
+              buttonName: _taskList[index].status,
+              taskStatus: TaskStatus.complatePage,
+            );
+          },
+          separatorBuilder: (context, index) => SizedBox(
+            height: 8,
+          ),
         ),
       ),
     );
+  }
+
+  // bool _getComplatedTaskListInProgress = false;
+  // List<TaskModel> _taskList = [];
+  Future<void> _getAllComplatedTaskList() async {
+    _getComplatedTaskListInProgress = true;
+    setState(() {});
+    NetworkResponse response =
+        await NetworkClient.getRequest(url: ApiUrls.complatedTaskListUrl);
+    if (response.isSuccess) {
+      TaskListModel taskListModel = TaskListModel.fromJson(response.data ?? {});
+      _taskList = taskListModel.taskList;
+    } else {
+      // ignore: use_build_context_synchronously
+      showSnackbarMessage(context, response.errorMessage, true);
+    }
+    _getComplatedTaskListInProgress = false;
+    setState(() {});
   }
 }
