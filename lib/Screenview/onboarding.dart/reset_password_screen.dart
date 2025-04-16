@@ -1,19 +1,29 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
+import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
+import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
+import 'package:task_management_app/Screenview/style/style.dart';
 import 'package:task_management_app/const/app_int.dart';
+import 'package:task_management_app/data/api_services/network_client.dart';
+import 'package:task_management_app/data/api_services/network_response.dart';
+import 'package:task_management_app/data/utils/api_urls.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({super.key});
+  final String email;
+  final String verifyPin;
+  const ResetPasswordScreen(this.email, this.verifyPin, {super.key});
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  final TextEditingController _fpasswordController = TextEditingController();
-  final TextEditingController _spasswordController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmpasswordController =
+      TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  bool _resetPasswordInProgress = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +49,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   obscureText: true,
                   keyboardType: TextInputType.visiblePassword,
                   textInputAction: TextInputAction.next,
-                  controller: _fpasswordController,
+                  controller: _passwordController,
                   decoration: InputDecoration(
                     hintText: "New Password",
                   ),
@@ -51,7 +61,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   obscureText: true,
                   keyboardType: TextInputType.visiblePassword,
                   textInputAction: TextInputAction.done,
-                  controller: _spasswordController,
+                  controller: _confirmpasswordController,
                   decoration: InputDecoration(
                     hintText: "Confirm new Password",
                   ),
@@ -59,8 +69,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 SizedBox(
                   height: 15,
                 ),
-                ElevatedButton(
-                    onPressed: _ontapSubmitButton, child: Text("Submit")),
+                Visibility(
+                  visible: _resetPasswordInProgress == false,
+                  replacement: CenterCircularProgressIndecator(),
+                  child: ElevatedButton(
+                      onPressed: _ontapSubmitButton, child: Text("Submit")),
+                ),
                 SizedBox(
                   height: 25,
                 ),
@@ -103,14 +117,48 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   void _ontapSubmitButton() {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => LoginScreen()), (pre) => false);
+    if (_formkey.currentState!.validate()) {
+      if (_passwordController.text == _confirmpasswordController.text) {
+        resetPassword();
+      } else {
+        showSnackbarMessage(context, "Password should be same", true);
+      }
+    }
+    // Navigator.pushAndRemoveUntil(context,
+    //     MaterialPageRoute(builder: (context) => LoginScreen()), (pre) => false);
+  }
+
+  Future<void> resetPassword() async {
+    _resetPasswordInProgress = true;
+    setState(() {});
+    Map<String, dynamic> requestBody = {
+      "email": widget.email,
+      "OTP": widget.verifyPin,
+      "password": _passwordController.text.trim()
+    };
+
+    NetworkResponse response = await NetworkClient.postRequest(
+        url: ApiUrls.recoverResetPasswordUrl, body: requestBody);
+    _resetPasswordInProgress = false;
+    setState(() {});
+
+    if (response.isSuccess) {
+      SuccessToast("Your password reset successful");
+      Navigator.pushAndRemoveUntil(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+          (pre) => false);
+    } else {
+      // ignore: use_build_context_synchronously
+      showSnackbarMessage(context, response.errorMessage, true);
+    }
   }
 
   @override
   void dispose() {
-    _spasswordController.dispose();
-    _fpasswordController.dispose();
+    _passwordController.dispose();
+    _confirmpasswordController.dispose();
     super.dispose();
   }
 }

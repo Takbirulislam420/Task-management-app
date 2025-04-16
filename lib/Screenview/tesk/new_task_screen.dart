@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
@@ -25,6 +26,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   bool _getTaskListInProgress = false;
   List<TaskModel> _taskList = [];
   List<TaskStatusCountModel> _taskStatusCountList = [];
+  var formatter = DateFormat('dd-MM-yyyy');
 
   @override
   void initState() {
@@ -57,10 +59,16 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   shrinkWrap: true,
                   itemCount: _taskList.length,
                   itemBuilder: (context, index) {
+                    var dateNtime = _taskList[index].createDate;
+                    DateTime parsedDate = DateTime.parse(dateNtime).toLocal();
+                    String formattedDate =
+                        DateFormat('dd MMMM yyyy').format(parsedDate);
+                    String formattedTime =
+                        DateFormat('hh:mma').format(parsedDate);
                     return TaskCardWidget(
                       title: _taskList[index].title,
                       description: _taskList[index].description,
-                      date: "Date: ${_taskList[index].createDate}",
+                      date: "Time: $formattedTime / $formattedDate",
                       buttonName: "new",
                       taskStatus: TaskStatus.newPage,
                     );

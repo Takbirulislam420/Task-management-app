@@ -44,6 +44,7 @@ class UserModel {
       'lastName': lastName,
       'mobile': mobile,
       'createdDate': createdDate,
+      'photo': photo
     };
   }
 
