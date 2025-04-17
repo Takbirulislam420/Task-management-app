@@ -4,7 +4,7 @@ import 'package:task_management_app/Screenview/Components/background_component.d
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
-import 'package:task_management_app/Screenview/style/style.dart';
+import 'package:task_management_app/Screenview/style_&_function/style.dart';
 import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';

@@ -5,6 +5,8 @@ import 'package:task_management_app/Screenview/Components/center_circular_progre
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/Components/summary_card.dart';
 import 'package:task_management_app/Screenview/Components/task_card_widget.dart';
+import 'package:task_management_app/Screenview/style_&_function/my_custom_function.dart';
+import 'package:task_management_app/Screenview/style_&_function/style.dart';
 import 'package:task_management_app/Screenview/tesk/add_new_task_screen.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
@@ -44,43 +46,71 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         child: Icon(Icons.add),
       ),
       body: BackgroundComponent(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _getStatusCountInProgress
-                  ? CenterCircularProgressIndecator()
-                  : buildSummarySection(),
-              Visibility(
-                visible: _getTaskListInProgress == false,
-                replacement: SizedBox(
-                    height: 300, child: CenterCircularProgressIndecator()),
-                child: ListView.separated(
-                  primary: false,
-                  shrinkWrap: true,
-                  itemCount: _taskList.length,
-                  itemBuilder: (context, index) {
-                    var dateNtime = _taskList[index].createDate;
-                    DateTime parsedDate = DateTime.parse(dateNtime).toLocal();
-                    String formattedDate =
-                        DateFormat('dd MMMM yyyy').format(parsedDate);
-                    String formattedTime =
-                        DateFormat('hh:mma').format(parsedDate);
-                    return TaskCardWidget(
-                      title: _taskList[index].title,
-                      description: _taskList[index].description,
-                      date: "Time: $formattedTime / $formattedDate",
-                      buttonName: "new",
-                      taskStatus: TaskStatus.newPage,
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(
-                    height: 8,
-                  ),
+        child: _getStatusCountInProgress
+            ? CenterCircularProgressIndecator()
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    buildSummarySection(),
+                    Visibility(
+                      visible: _getTaskListInProgress == false,
+                      replacement: SizedBox(
+                          height: 300,
+                          child: CenterCircularProgressIndecator()),
+                      child: ListView.separated(
+                        primary: false,
+                        shrinkWrap: true,
+                        itemCount: _taskList.length,
+                        itemBuilder: (context, index) {
+                          var dateNtime = _taskList[index].createDate;
+                          DateTime parsedDate =
+                              DateTime.parse(dateNtime).toLocal();
+                          String formattedDate =
+                              DateFormat('dd MMMM yyyy').format(parsedDate);
+                          String formattedTime =
+                              DateFormat('hh:mma').format(parsedDate);
+                          return InkWell(
+                            onLongPress: () {
+                              customAlertFunction(
+                                context: context,
+                                title: "Confirm Delete",
+                                message:
+                                    "Are you sure you want to delete this task?",
+                                onOk: () {
+                                  SuccessToast("User confirmed delete");
+                                  // Proceed with deletion logic
+                                },
+                                onCancel: () {
+                                  SuccessToast("User cancelled delete");
+                                  // Maybe show a message or do nothing
+                                },
+                              );
+                            },
+                            child: TaskCardWidget(
+                              title: _taskList[index].title,
+                              description: _taskList[index].description,
+                              date: "Time: $formattedTime / $formattedDate",
+                              buttonName: "new",
+                              taskStatus: TaskStatus.newPage,
+                              onEdit: () {
+                                SuccessToast('Edit pressed');
+                                // Navigate to edit screen or perform update
+                              },
+                              onDelete: () {
+                                SuccessToast('Delete pressed');
+                                // Show confirmation dialog or delete from list
+                              },
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) => SizedBox(
+                          height: 8,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
-        ),
+              ),
       ),
     );
   }

@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarComponent(),
+      //drawer: ProfileDetailsDrower(),
       body: _screen[_selectedIndex],
       bottomNavigationBar: NavigationBar(
           selectedIndex: _selectedIndex,

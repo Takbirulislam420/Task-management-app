@@ -9,12 +9,18 @@ class TaskCardWidget extends StatelessWidget {
   String date;
   String buttonName;
   TaskStatus taskStatus;
+
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
   TaskCardWidget({
     required this.title,
     required this.description,
     required this.date,
     required this.buttonName,
     required this.taskStatus,
+    required this.onEdit,
+    required this.onDelete,
     super.key,
   });
 
@@ -50,8 +56,14 @@ class TaskCardWidget extends StatelessWidget {
                   side: BorderSide.none,
                 ),
                 Spacer(),
-                IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
-                IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+                IconButton(
+                  onPressed: onEdit,
+                  icon: Icon(Icons.edit),
+                ),
+                IconButton(
+                  onPressed: onDelete,
+                  icon: Icon(Icons.delete),
+                ),
               ],
             )
           ],
