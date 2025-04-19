@@ -11,6 +11,7 @@ class ApiUrls {
   static final String recoverVerifyOtpUrl = "$_baseUrls/RecoverVerifyOtp/";
   static String updateStatusTaskUrl(String taskId, String status) =>
       "$_baseUrls/updateTaskStatus/$taskId/$status";
+  static String deleteTaskUrl(String taskId) => "$_baseUrls/deleteTask/$taskId";
   static final String recoverResetPasswordUrl =
       "$_baseUrls/RecoverResetPassword";
 

@@ -30,21 +30,27 @@ class _CancelTaskScreenState extends State<CancelTaskScreen> {
     return Scaffold(
       body: _getDeletedTaskListInProgress
           ? CenterCircularProgressIndecator()
-          : ListView.separated(
-              //primary: false,
-              // shrinkWrap: true,
-              itemCount: _taskList.length,
-              itemBuilder: (context, index) {
-                return TaskCardWidget(
-                  taskStatus: TaskStatus.cancelledPage,
-                  taskModel: _taskList[index],
-                  refreshTaskList: () {
-                    _getAllDeletedTaskList();
-                  },
-                );
-              },
-              separatorBuilder: (context, index) => SizedBox(
-                height: 8,
+          : Visibility(
+              visible: _taskList.isEmpty == false,
+              replacement: Center(
+                child: Text("No data"),
+              ),
+              child: ListView.separated(
+                //primary: false,
+                // shrinkWrap: true,
+                itemCount: _taskList.length,
+                itemBuilder: (context, index) {
+                  return TaskCardWidget(
+                    taskStatus: TaskStatus.cancelledPage,
+                    taskModel: _taskList[index],
+                    refreshTaskList: () {
+                      _getAllDeletedTaskList();
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 8,
+                ),
               ),
             ),
     );
