@@ -29,7 +29,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       body: BackgroundComponent(
           child: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(AppInt.padding),
+        padding: EdgeInsets.only(left: AppInt.padding, right: AppInt.padding),
         child: SingleChildScrollView(
           child: Form(
             key: _formkey,
