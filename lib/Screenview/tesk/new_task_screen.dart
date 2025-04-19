@@ -57,56 +57,46 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       replacement: SizedBox(
                           height: 300,
                           child: CenterCircularProgressIndecator()),
-                      child: ListView.separated(
-                        primary: false,
-                        shrinkWrap: true,
-                        itemCount: _taskList.length,
-                        itemBuilder: (context, index) {
-                          var dateNtime = _taskList[index].createDate;
-                          DateTime parsedDate =
-                              DateTime.parse(dateNtime).toLocal();
-                          String formattedDate =
-                              DateFormat('dd MMMM yyyy').format(parsedDate);
-                          String formattedTime =
-                              DateFormat('hh:mma').format(parsedDate);
-                          return InkWell(
-                            onLongPress: () {
-                              customAlertFunction(
-                                context: context,
-                                title: "Confirm Delete",
-                                message:
-                                    "Are you sure you want to delete this task?",
-                                onOk: () {
-                                  SuccessToast("User confirmed delete");
-                                  // Proceed with deletion logic
-                                },
-                                onCancel: () {
-                                  SuccessToast("User cancelled delete");
-                                  // Maybe show a message or do nothing
-                                },
-                              );
-                            },
-                            child: TaskCardWidget(
-                              title: _taskList[index].title,
-                              description: _taskList[index].description,
-                              date: "Time: $formattedTime / $formattedDate",
-                              buttonName: "new",
-                              taskStatus: TaskStatus.newPage,
-                              onEdit: () {
-                                SuccessToast('Edit pressed');
-                                // Navigate to edit screen or perform update
+                      child: _taskList.isEmpty
+                          ? Center(
+                              child: Text("No Data"),
+                            )
+                          : ListView.separated(
+                              primary: false,
+                              shrinkWrap: true,
+                              itemCount: _taskList.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onLongPress: () {
+                                    customAlertFunction(
+                                      context: context,
+                                      title: "Confirm Delete",
+                                      message:
+                                          "Are you sure you want to delete this task?",
+                                      onOk: () {
+                                        SuccessToast("User confirmed delete");
+                                        // Proceed with deletion logic
+                                      },
+                                      onCancel: () {
+                                        SuccessToast("User cancelled delete");
+                                        // Maybe show a message or do nothing
+                                      },
+                                    );
+                                  },
+                                  child: TaskCardWidget(
+                                    taskStatus: TaskStatus.newPage,
+                                    taskModel: _taskList[index],
+                                    refreshTaskList: () {
+                                      _getAllTaskStatusCount();
+                                      _getAllTaskList();
+                                    },
+                                  ),
+                                );
                               },
-                              onDelete: () {
-                                SuccessToast('Delete pressed');
-                                // Show confirmation dialog or delete from list
-                              },
+                              separatorBuilder: (context, index) => SizedBox(
+                                height: 8,
+                              ),
                             ),
-                          );
-                        },
-                        separatorBuilder: (context, index) => SizedBox(
-                          height: 8,
-                        ),
-                      ),
                     )
                   ],
                 ),

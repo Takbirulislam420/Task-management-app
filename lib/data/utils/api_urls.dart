@@ -9,6 +9,8 @@ class ApiUrls {
   static final String newTaskListUrl = "$_baseUrls/listTaskByStatus/New";
   static final String emailVerifyUrl = "$_baseUrls/RecoverVerifyEmail/";
   static final String recoverVerifyOtpUrl = "$_baseUrls/RecoverVerifyOtp/";
+  static String updateStatusTaskUrl(String taskId, String status) =>
+      "$_baseUrls/updateTaskStatus/$taskId/$status";
   static final String recoverResetPasswordUrl =
       "$_baseUrls/RecoverResetPassword";
 
@@ -16,4 +18,6 @@ class ApiUrls {
       "$_baseUrls/listTaskByStatus/Progress";
   static final String complatedTaskListUrl =
       "$_baseUrls/listTaskByStatus/Complated";
+  static final String cancelledTaskListUrl =
+      "$_baseUrls/listTaskByStatus/Cancelled";
 }

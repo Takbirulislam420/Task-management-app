@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/Components/task_card_widget.dart';
-import 'package:task_management_app/Screenview/style_&_function/style.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/model/task_list_model.dart';
@@ -32,31 +31,27 @@ class _ComplateTaskScreenState extends State<ComplateTaskScreen> {
       body: Visibility(
         visible: _getComplatedTaskListInProgress == false,
         replacement: CenterCircularProgressIndecator(),
-        child: ListView.separated(
-          //primary: false,
-          // shrinkWrap: true,
-          itemCount: _taskList.length,
-          itemBuilder: (context, index) {
-            return TaskCardWidget(
-              title: _taskList[index].title,
-              description: _taskList[index].description,
-              date: "Date: ${_taskList[index].createDate}",
-              buttonName: _taskList[index].status,
-              taskStatus: TaskStatus.complatePage,
-              onEdit: () {
-                SuccessToast('Edit pressed');
-                // Navigate to edit screen or perform update
-              },
-              onDelete: () {
-                SuccessToast('Delete pressed');
-                // Show confirmation dialog or delete from list
-              },
-            );
-          },
-          separatorBuilder: (context, index) => SizedBox(
-            height: 8,
-          ),
-        ),
+        child: _taskList.isEmpty
+            ? Center(
+                child: Text("No Data"),
+              )
+            : ListView.separated(
+                //primary: false,
+                // shrinkWrap: true,
+                itemCount: _taskList.length,
+                itemBuilder: (context, index) {
+                  return TaskCardWidget(
+                    taskStatus: TaskStatus.complatePage,
+                    taskModel: _taskList[index],
+                    refreshTaskList: () {
+                      _getAllComplatedTaskList();
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 8,
+                ),
+              ),
       ),
     );
   }

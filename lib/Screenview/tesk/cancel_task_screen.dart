@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/Components/task_card_widget.dart';
-import 'package:task_management_app/Screenview/style_&_function/style.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/model/task_list_model.dart';
@@ -37,18 +36,10 @@ class _CancelTaskScreenState extends State<CancelTaskScreen> {
               itemCount: _taskList.length,
               itemBuilder: (context, index) {
                 return TaskCardWidget(
-                  title: _taskList[index].title,
-                  description: _taskList[index].description,
-                  date: "Date: ${_taskList[index].createDate}",
-                  buttonName: _taskList[index].status,
                   taskStatus: TaskStatus.cancelledPage,
-                  onEdit: () {
-                    SuccessToast('Edit pressed');
-                    // Navigate to edit screen or perform update
-                  },
-                  onDelete: () {
-                    SuccessToast('Delete pressed');
-                    // Show confirmation dialog or delete from list
+                  taskModel: _taskList[index],
+                  refreshTaskList: () {
+                    _getAllDeletedTaskList();
                   },
                 );
               },
@@ -63,7 +54,7 @@ class _CancelTaskScreenState extends State<CancelTaskScreen> {
     _getDeletedTaskListInProgress = true;
     setState(() {});
     NetworkResponse response =
-        await NetworkClient.getRequest(url: ApiUrls.complatedTaskListUrl);
+        await NetworkClient.getRequest(url: ApiUrls.cancelledTaskListUrl);
     if (response.isSuccess) {
       TaskListModel taskListModel = TaskListModel.fromJson(response.data ?? {});
       _taskList = taskListModel.taskList;
