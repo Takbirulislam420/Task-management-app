@@ -1,9 +1,11 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/splash_screen.dart';
 import 'package:task_management_app/const/app_colors.dart';
 import 'package:task_management_app/const/app_string.dart';
+import 'package:task_management_app/controller_binder.dart';
 
 class TaskManagementApp extends StatefulWidget {
   const TaskManagementApp({super.key});
@@ -18,11 +20,12 @@ class TaskManagementApp extends StatefulWidget {
 class _TaskManagementAppState extends State<TaskManagementApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       navigatorKey: TaskManagementApp.navigatorkey,
       title: AppString.appName,
+      initialBinding: ControllerBinder(),
 
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       theme: ThemeData(
         colorSchemeSeed: Colors.amber,
         inputDecorationTheme: InputDecorationTheme(

@@ -1,19 +1,16 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
-import 'package:task_management_app/Screenview/controller/auth_controller.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/forget_password_verify_email_screen.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/registation_Screen.dart';
 import 'package:task_management_app/Screenview/tesk/home_screen.dart';
 import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/const/app_string.dart';
-import 'package:task_management_app/data/api_services/network_client.dart';
-import 'package:task_management_app/data/api_services/network_response.dart';
-import 'package:task_management_app/data/model/login_model.dart';
-import 'package:task_management_app/data/utils/api_urls.dart';
+import 'package:task_management_app/getcontroller/login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,9 +22,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final LoginController _loginController = Get.find<LoginController>();
   // To toggle password visibility
   bool _isObscured = true;
-  bool _loginInProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,13 +101,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 15,
                 ),
-                Visibility(
-                  visible: _loginInProgress == false,
-                  replacement: CenterCircularProgressIndecator(),
-                  child: ElevatedButton(
-                      onPressed: _ontapLogInButton,
-                      child: Text(AppString.loginButtonText)),
-                ),
+                GetBuilder<LoginController>(builder: (controller) {
+                  return Visibility(
+                    visible: controller.loginInProgress == false,
+                    replacement: CenterCircularProgressIndecator(),
+                    child: ElevatedButton(
+                        onPressed: _ontapLogInButton,
+                        child: Text(AppString.loginButtonText)),
+                  );
+                }),
                 SizedBox(
                   height: 25,
                 ),
@@ -155,31 +155,13 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       _logInUser();
     }
-    // Navigator.pushAndRemoveUntil(context,
-    //     MaterialPageRoute(builder: (context) => HomeScreen()), (pre) => false);
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => HomeScreen()),
-    // );
   }
 
   Future<void> _logInUser() async {
-    _loginInProgress = true;
-    setState(() {});
-    Map<String, dynamic> requestBody = {
-      "email": _emailController.text.trim(),
-      "password": _passwordController.text,
-    };
+    final bool isSuccess = await _loginController.logInUser(
+        _emailController.text.trim(), _passwordController.text);
 
-    NetworkResponse response = await NetworkClient.postRequest(
-        url: ApiUrls.userLogin, body: requestBody);
-    _loginInProgress = false;
-    setState(() {});
-
-    if (response.isSuccess) {
-      LoginModel loginModel = LoginModel.fromJson(response.data!);
-      AuthController.saveUserInformation(
-          loginModel.token, loginModel.userModel);
+    if (isSuccess) {
       // showSnackbarMessage(context, "Login successfull");
       Navigator.pushAndRemoveUntil(
           // ignore: use_build_context_synchronously
@@ -188,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
           (pre) => false);
     } else {
       // ignore: use_build_context_synchronously
-      showSnackbarMessage(context, response.errorMessage, true);
+      showSnackbarMessage(context, _loginController.errorMessage!, true);
     }
   }
 
