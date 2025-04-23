@@ -33,7 +33,7 @@ class LoginController extends GetxController {
     } else {
       _errorMessage = response.errorMessage;
     }
-    _loginInProgress = true;
+    _loginInProgress = false;
     update();
     return isSuccess;
   }
