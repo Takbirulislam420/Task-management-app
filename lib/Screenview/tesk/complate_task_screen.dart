@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/Components/task_card_widget.dart';
-import 'package:task_management_app/data/api_services/network_client.dart';
-import 'package:task_management_app/data/api_services/network_response.dart';
-import 'package:task_management_app/data/model/task_list_model.dart';
-import 'package:task_management_app/data/model/task_model.dart';
-import 'package:task_management_app/data/utils/api_urls.dart';
+import 'package:task_management_app/getcontroller/complated_task_controller.dart';
 
 class ComplateTaskScreen extends StatefulWidget {
   const ComplateTaskScreen({super.key});
@@ -16,8 +13,8 @@ class ComplateTaskScreen extends StatefulWidget {
 }
 
 class _ComplateTaskScreenState extends State<ComplateTaskScreen> {
-  bool _getComplatedTaskListInProgress = false;
-  List<TaskModel> _taskList = [];
+  final ComplatedTaskController _complatedTaskController =
+      Get.find<ComplatedTaskController>();
 
   @override
   void initState() {
@@ -28,49 +25,47 @@ class _ComplateTaskScreenState extends State<ComplateTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Visibility(
-        visible: _getComplatedTaskListInProgress == false,
-        replacement: CenterCircularProgressIndecator(),
-        child: _taskList.isEmpty
-            ? Center(
-                child: Text("No Data"),
-              )
-            : ListView.separated(
-                //primary: false,
-                // shrinkWrap: true,
-                itemCount: _taskList.length,
-                itemBuilder: (context, index) {
-                  return TaskCardWidget(
-                    taskStatus: TaskStatus.complatePage,
-                    taskModel: _taskList[index],
-                    refreshTaskList: () {
-                      _getAllComplatedTaskList();
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) => SizedBox(
-                  height: 8,
+      body: GetBuilder<ComplatedTaskController>(builder: (controller) {
+        return Visibility(
+          visible: controller.complatedTaskInProgress == false,
+          replacement: CenterCircularProgressIndecator(),
+          child: controller.complatedTaskList.isEmpty
+              ? Center(
+                  child: Text("No Data"),
+                )
+              : ListView.separated(
+                  //primary: false,
+                  // shrinkWrap: true,
+                  itemCount: controller.complatedTaskList.length,
+                  itemBuilder: (context, index) {
+                    return TaskCardWidget(
+                      taskStatus: TaskStatus.complatePage,
+                      taskModel: controller.complatedTaskList[index],
+                      refreshTaskList: () {
+                        _getAllComplatedTaskList();
+                      },
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 8,
+                  ),
                 ),
-              ),
-      ),
+        );
+      }),
     );
   }
 
   // bool _getComplatedTaskListInProgress = false;
   // List<TaskModel> _taskList = [];
   Future<void> _getAllComplatedTaskList() async {
-    _getComplatedTaskListInProgress = true;
-    setState(() {});
-    NetworkResponse response =
-        await NetworkClient.getRequest(url: ApiUrls.complatedTaskListUrl);
-    if (response.isSuccess) {
-      TaskListModel taskListModel = TaskListModel.fromJson(response.data ?? {});
-      _taskList = taskListModel.taskList;
-    } else {
-      // ignore: use_build_context_synchronously
-      showSnackbarMessage(context, response.errorMessage, true);
+    final bool isSuccess =
+        await _complatedTaskController.getPprogressTaskList();
+    if (!isSuccess) {
+      showSnackbarMessage(
+          // ignore: use_build_context_synchronously
+          context,
+          _complatedTaskController.errorMessage!,
+          true);
     }
-    _getComplatedTaskListInProgress = false;
-    setState(() {});
   }
 }

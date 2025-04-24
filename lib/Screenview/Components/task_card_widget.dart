@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
-import 'package:task_management_app/data/api_services/network_client.dart';
-import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/model/task_model.dart';
-import 'package:task_management_app/data/utils/api_urls.dart';
+import 'package:task_management_app/getcontroller/update_and_delete_task_controller.dart';
 
 enum TaskStatus { newPage, progressPage, complatePage, cancelledPage }
 
@@ -27,7 +26,9 @@ class TaskCardWidget extends StatefulWidget {
 }
 
 class _TaskCardWidgetState extends State<TaskCardWidget> {
-  bool _inProgress = false;
+  final UpdateAndDeleteTaskController _updateTaskController =
+      Get.find<UpdateAndDeleteTaskController>();
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -60,22 +61,25 @@ class _TaskCardWidgetState extends State<TaskCardWidget> {
                   side: BorderSide.none,
                 ),
                 Spacer(),
-                Visibility(
-                  visible: _inProgress == false,
-                  replacement: CenterCircularProgressIndecator(),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: _showUpdateStatusDialog,
-                        icon: Icon(Icons.edit),
-                      ),
-                      IconButton(
-                        onPressed: _deleteTask,
-                        icon: Icon(Icons.delete),
-                      ),
-                    ],
-                  ),
-                )
+                GetBuilder<UpdateAndDeleteTaskController>(
+                    builder: (controller) {
+                  return Visibility(
+                    visible: controller.updateAndDeleteTaskInProgress == false,
+                    replacement: CenterCircularProgressIndecator(),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: _showUpdateStatusDialog,
+                          icon: Icon(Icons.edit),
+                        ),
+                        IconButton(
+                          onPressed: _deleteTask,
+                          icon: Icon(Icons.delete),
+                        ),
+                      ],
+                    ),
+                  );
+                })
               ],
             )
           ],
@@ -168,34 +172,30 @@ class _TaskCardWidgetState extends State<TaskCardWidget> {
   bool isSelected(String status) => widget.taskModel.status == status;
 
   Future<void> _changeTaskStatus(String status) async {
-    _inProgress = true;
-    setState(() {});
-    final NetworkResponse response = await NetworkClient.getRequest(
-        url: ApiUrls.updateStatusTaskUrl(widget.taskModel.id, status));
-    _inProgress = false;
-
-    if (response.isSuccess) {
+    final bool isSuccess = await _updateTaskController.getUpdateTaskStatus(
+        widget.taskModel.id, status);
+    if (isSuccess) {
       widget.refreshTaskList();
     } else {
-      setState(() {});
-      // ignore: use_build_context_synchronously
-      showSnackbarMessage(context, response.errorMessage, true);
+      showSnackbarMessage(
+          // ignore: use_build_context_synchronously
+          context,
+          _updateTaskController.errorMessage!,
+          true);
     }
   }
 
   Future<void> _deleteTask() async {
-    _inProgress = true;
-    setState(() {});
-    final NetworkResponse response = await NetworkClient.getRequest(
-        url: ApiUrls.deleteTaskUrl(widget.taskModel.id));
-    _inProgress = false;
-
-    if (response.isSuccess) {
+    final bool isSuccess =
+        await _updateTaskController.getDeleteTaskStatus(widget.taskModel.id);
+    if (isSuccess) {
       widget.refreshTaskList();
     } else {
-      setState(() {});
-      // ignore: use_build_context_synchronously
-      showSnackbarMessage(context, response.errorMessage, true);
+      showSnackbarMessage(
+          // ignore: use_build_context_synchronously
+          context,
+          _updateTaskController.errorMessage!,
+          true);
     }
   }
 

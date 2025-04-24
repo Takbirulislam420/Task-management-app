@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:task_management_app/Screenview/Components/app_bar_component.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
@@ -7,9 +8,7 @@ import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/controller/auth_controller.dart';
 import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/const/app_string.dart';
-import 'package:task_management_app/data/api_services/network_client.dart';
-import 'package:task_management_app/data/api_services/network_response.dart';
-import 'package:task_management_app/data/utils/api_urls.dart';
+import 'package:task_management_app/getcontroller/update_profile_controller.dart';
 import '../../data/model/user_model.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
@@ -26,10 +25,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final UpdateProfileController _updateProfileController =
+      Get.find<UpdateProfileController>();
 
   final ImagePicker _picker = ImagePicker();
   XFile? _pickedImage;
-  bool _updateProfileInPregree = false;
 
   @override
   void initState() {
@@ -146,13 +146,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   SizedBox(
                     height: 15,
                   ),
-                  Visibility(
-                    visible: _updateProfileInPregree == false,
-                    replacement: Center(child: CircularProgressIndicator()),
-                    child: ElevatedButton(
-                        onPressed: _ontapSubmitButton,
-                        child: Text(AppString.submit)),
-                  ),
+                  GetBuilder<UpdateProfileController>(builder: (controller) {
+                    return Visibility(
+                      visible: controller.updateProfileInProgress == false,
+                      replacement: Center(child: CircularProgressIndicator()),
+                      child: ElevatedButton(
+                          onPressed: _ontapSubmitButton,
+                          child: Text(AppString.submit)),
+                    );
+                  }),
                   SizedBox(
                     height: 25,
                   ),
@@ -205,17 +207,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   void _ontapSubmitButton() {
     _updateUser();
-    // Navigator.pushAndRemoveUntil(context,
-    //     MaterialPageRoute(builder: (context) => HomeScreen()), (pre) => false);
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => HomeScreen()),
-    // );
   }
 
   Future<void> _updateUser() async {
-    _updateProfileInPregree = true;
-    setState(() {});
     Map<String, dynamic> requestBody = {
       "email": _emailController.text.trim(),
       "firstName": _fnameController.text.trim(),
@@ -231,18 +225,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       requestBody['photo'] = encodeImage;
     }
 
-    NetworkResponse response = await NetworkClient.postRequest(
-        url: ApiUrls.userUpdateProfile, body: requestBody);
-    _updateProfileInPregree = false;
-    setState(() {});
+    final bool isSuccess =
+        await _updateProfileController.getUpdateProfile(requestBody);
 
-    if (response.isSuccess) {
+    if (isSuccess) {
       _passwordController.clear();
       // ignore: use_build_context_synchronously
       showSnackbarMessage(context, "your profile updated successfull");
     } else {
-      // ignore: use_build_context_synchronously
-      showSnackbarMessage(context, response.errorMessage, true);
+      showSnackbarMessage(
+          // ignore: use_build_context_synchronously
+          context,
+          _updateProfileController.errorMessage!,
+          true);
     }
   }
 

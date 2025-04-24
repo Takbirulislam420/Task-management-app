@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
             NavigationDestination(icon: Icon(Icons.home), label: "Home"),
             NavigationDestination(
                 icon: Icon(Icons.download_sharp), label: "Progress"),
-            NavigationDestination(icon: Icon(Icons.done), label: "Complate"),
+            NavigationDestination(icon: Icon(Icons.done), label: "Complated"),
             NavigationDestination(icon: Icon(Icons.cancel), label: "Cancelled"),
           ]),
     );
