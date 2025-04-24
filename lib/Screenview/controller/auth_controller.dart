@@ -1,43 +1,42 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management_app/data/model/user_model.dart';
 
-class AuthController {
-  static String? token;
-  static UserModel? userModel;
+class AuthController extends GetxController {
+  static AuthController get to => Get.find();
+
+  String? token;
+  UserModel? userModel;
 
   static const String _tokenKey = 'token';
   static const String _userDataKey = 'user-data';
 
-  //save user information
-  static Future<void> saveUserInformation(
+  Future<void> saveUserInformation(
       String accessToken, UserModel userModelData) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString(_tokenKey, accessToken);
-    sharedPreferences.setString(
+    await sharedPreferences.setString(_tokenKey, accessToken);
+    await sharedPreferences.setString(
         _userDataKey, jsonEncode(userModelData.toJson()));
     token = accessToken;
     userModel = userModelData;
+    update(); // notify listeners
   }
 
-  //get userinformation
-  static Future<void> getUserInformation() async {
+  Future<void> getUserInformation() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? accessToken = sharedPreferences.getString(_tokenKey);
+    token = sharedPreferences.getString(_tokenKey);
     String? savedUserModelString = sharedPreferences.getString(_userDataKey);
     if (savedUserModelString != null) {
-      UserModel savedUserModel =
-          UserModel.fromjson(jsonDecode(savedUserModelString));
-      userModel = savedUserModel;
+      userModel = UserModel.fromjson(jsonDecode(savedUserModelString));
     }
-    token = accessToken;
+    update(); // notify listeners
   }
 
-  // i will check here user already login or not
-  static Future<bool> checkIfUserLogIn() async {
+  Future<bool> checkIfUserLogIn() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? accessToken = sharedPreferences.getString(_tokenKey);
-    if (accessToken != null) {
+    token = sharedPreferences.getString(_tokenKey);
+    if (token != null) {
       await getUserInformation();
       return true;
     } else {
@@ -45,11 +44,11 @@ class AuthController {
     }
   }
 
-  // clear all from cash
-  static Future<void> clearUserData() async {
+  Future<void> clearUserData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
     token = null;
     userModel = null;
+    update();
   }
 }

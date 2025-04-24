@@ -19,9 +19,6 @@ class UpdateProfileController extends GetxController {
 
     if (response.isSuccess) {
       if (response.isSuccess) {
-        // LoginModel loginModel = LoginModel.fromJson(response.data!);
-        // await AuthController.saveUserInformation(
-        //     AuthController.token!, loginModel.userModel);
         isSuccess = true;
         _errorMessage = null;
       }

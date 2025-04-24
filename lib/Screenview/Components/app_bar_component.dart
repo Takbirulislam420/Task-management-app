@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/controller/auth_controller.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
 import 'package:task_management_app/Screenview/profile/update_profile_screen.dart';
@@ -23,37 +24,42 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
           }
           _onTapProfileUpdateScreen(context);
         },
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: _shouldShowImage(AuthController.userModel?.photo)
-                  ? MemoryImage(
-                      base64Decode(AuthController.userModel?.photo ?? ""))
-                  : null,
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AuthController.userModel?.fullName ?? "Unknown",
-                    style: textTheme.bodyLarge?.copyWith(color: Colors.white),
+        child: GetBuilder<AuthController>(
+          builder: (controller) {
+            return Row(
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundImage: _shouldShowImage(controller.userModel?.photo)
+                      ? MemoryImage(
+                          base64Decode(controller.userModel?.photo ?? ""))
+                      : null,
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.userModel?.fullName ?? "Unknown",
+                        style:
+                            textTheme.bodyLarge?.copyWith(color: Colors.white),
+                      ),
+                      Text(
+                        controller.userModel?.email ?? "UnknownEmail",
+                        style:
+                            textTheme.bodySmall?.copyWith(color: Colors.white),
+                      )
+                    ],
                   ),
-                  Text(
-                    AuthController.userModel?.email ?? "UnknownEmail",
-                    style: textTheme.bodySmall?.copyWith(color: Colors.white),
-                  )
-                ],
-              ),
-            ),
-            IconButton(
-                onPressed: () => _onTapLogOutButton(context),
-                icon: Icon(Icons.logout))
-          ],
+                ),
+                IconButton(
+                  onPressed: () => _onTapLogOutButton(context),
+                  icon: Icon(Icons.logout),
+                )
+              ],
+            );
+          },
         ),
       ),
     );
@@ -73,7 +79,7 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Future<void> _onTapLogOutButton(BuildContext context) async {
-    await AuthController.clearUserData();
+    await AuthController.to.clearUserData();
     // ignore: use_build_context_synchronously
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => LoginScreen()), (pre) => false);

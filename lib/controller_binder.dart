@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:task_management_app/Screenview/controller/auth_controller.dart';
 import 'package:task_management_app/getcontroller/add_new_task_controller.dart';
 import 'package:task_management_app/getcontroller/cancelled_task_controller.dart';
 import 'package:task_management_app/getcontroller/complated_task_controller.dart';
@@ -21,5 +22,6 @@ class ControllerBinder extends Bindings {
     Get.put(CancelledTaskController());
     Get.put(UpdateAndDeleteTaskController());
     Get.put(UpdateProfileController());
+    Get.put(AuthController());
   }
 }

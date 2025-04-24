@@ -25,7 +25,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
   Future<void> moveToNextScreen() async {
     await Future.delayed(Duration(seconds: 3)); //wait here 3 seconds
     final bool isLoggedIn =
-        await AuthController.checkIfUserLogIn(); //check log in here
+        await AuthController.to.checkIfUserLogIn(); //check log in here
     Navigator.pushReplacement(
       // ignore: use_build_context_synchronously
       context,

@@ -1,3 +1,51 @@
+class UserModel {
+  late String id;
+  late String email;
+  late String firstName;
+  late String lastName;
+  late String mobile;
+  late String createdDate;
+  late String photo;
+
+  // ✅ Default constructor (এখানে optional করা হয়েছে createdDate/id/photo)
+  UserModel({
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.mobile,
+    this.id = '',
+    this.createdDate = '',
+    this.photo = '',
+  });
+
+  // ✅ from JSON
+  UserModel.fromjson(Map<String, dynamic> jsonData) {
+    id = jsonData['_id'] ?? '';
+    email = jsonData['email'] ?? '';
+    firstName = jsonData['firstName'] ?? '';
+    lastName = jsonData['lastName'] ?? '';
+    mobile = jsonData['mobile'] ?? '';
+    createdDate = jsonData['createdDate'] ?? '';
+    photo = jsonData['photo'] ?? '';
+  }
+
+  // ✅ to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
+      'mobile': mobile,
+      'createdDate': createdDate,
+      'photo': photo,
+    };
+  }
+
+  // ✅ Getter for full name
+  String get fullName => '$firstName $lastName';
+} //with chatgpt
+
 // class UserModel{
 //     late final String id;
 //     late final String email;
@@ -17,41 +65,41 @@
 // }
 
 //method two
-class UserModel {
-  late final String id;
-  late final String email;
-  late final String firstName;
-  late final String lastName;
-  late final String mobile;
-  late final String createdDate;
-  late final String photo;
+// class UserModel {
+//   late final String id;
+//   late final String email;
+//   late final String firstName;
+//   late final String lastName;
+//   late final String mobile;
+//   late final String createdDate;
+//   late final String photo;
 
-  UserModel.fromjson(Map<String, dynamic> jsonData) {
-    id = jsonData['_id'] ?? '';
-    email = jsonData['email'] ?? '';
-    firstName = jsonData['firstName'] ?? '';
-    lastName = jsonData['lastName'] ?? '';
-    mobile = jsonData['mobile'] ?? '';
-    createdDate = jsonData['createdDate'] ?? '';
-    photo = jsonData['photo'] ?? '';
-  }
+//   UserModel.fromjson(Map<String, dynamic> jsonData) {
+//     id = jsonData['_id'] ?? '';
+//     email = jsonData['email'] ?? '';
+//     firstName = jsonData['firstName'] ?? '';
+//     lastName = jsonData['lastName'] ?? '';
+//     mobile = jsonData['mobile'] ?? '';
+//     createdDate = jsonData['createdDate'] ?? '';
+//     photo = jsonData['photo'] ?? '';
+//   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'mobile': mobile,
-      'createdDate': createdDate,
-      'photo': photo
-    };
-  }
+//   Map<String, dynamic> toJson() {
+//     return {
+//       '_id': id,
+//       'email': email,
+//       'firstName': firstName,
+//       'lastName': lastName,
+//       'mobile': mobile,
+//       'createdDate': createdDate,
+//       'photo': photo
+//     };
+//   }
 
-  String get fullName {
-    return '$firstName $lastName';
-  }
-}
+//   String get fullName {
+//     return '$firstName $lastName';
+//   }
+// }
 
 //Method three
 // class UserModel {

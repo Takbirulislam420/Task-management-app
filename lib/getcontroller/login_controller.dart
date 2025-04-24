@@ -26,8 +26,8 @@ class LoginController extends GetxController {
 
     if (response.isSuccess) {
       LoginModel loginModel = LoginModel.fromJson(response.data!);
-      await AuthController.saveUserInformation(
-          loginModel.token, loginModel.userModel);
+      await AuthController.to
+          .saveUserInformation(loginModel.token, loginModel.userModel);
       isSuccess = true;
       _errorMessage = null;
     } else {

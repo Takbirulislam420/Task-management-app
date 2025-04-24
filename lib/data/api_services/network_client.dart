@@ -14,7 +14,7 @@ class NetworkClient {
   static Future<NetworkResponse> getRequest({required String url}) async {
     try {
       Uri uri = Uri.parse(url);
-      Map<String, String> header = {'Token': AuthController.token ?? ''};
+      Map<String, String> header = {'Token': AuthController.to.token ?? ''};
       _preRequestLog(url, header);
       Response response = await get(uri, headers: header);
       _pastRequestLog(url, response.statusCode,
@@ -58,7 +58,7 @@ class NetworkClient {
       Map<String, String> headers = {
         'Content-type': 'Application/json',
         'Accept': 'application/json',
-        'Token': AuthController.token ?? " "
+        'Token': AuthController.to.token ?? " "
       };
       _preRequestLog(url, headers, body: body);
       Response response =
@@ -117,7 +117,7 @@ class NetworkClient {
   }
 
   static Future<void> _moveToLoginScreen() async {
-    await AuthController.clearUserData();
+    await AuthController.to.clearUserData();
     Navigator.pushAndRemoveUntil(TaskManagementApp.navigatorkey.currentContext!,
         MaterialPageRoute(builder: (context) => LoginScreen()), (pre) => false);
   }
