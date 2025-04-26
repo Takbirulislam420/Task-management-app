@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
@@ -137,13 +138,7 @@ class _ForgetPasswordPinVerificationScreenState
 
     if (response.isSuccess) {
       SuccessToast("OTP Successfully verifed");
-      Navigator.push(
-        // ignore: use_build_context_synchronously
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ResetPasswordScreen(widget.email, verifyPinForNav)),
-      );
+      Get.to(ResetPasswordScreen(widget.email, verifyPinForNav));
     } else {
       // ignore: use_build_context_synchronously
       showSnackbarMessage(context, response.errorMessage, true);
@@ -151,8 +146,7 @@ class _ForgetPasswordPinVerificationScreenState
   }
 
   void _ontapSinginButton() {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => LoginScreen()), (pre) => false);
+    Get.offAll(LoginScreen());
   }
 
   @override

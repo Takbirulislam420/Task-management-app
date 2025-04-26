@@ -1,46 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/Components/app_bar_component.dart';
 import 'package:task_management_app/Screenview/tesk/cancel_task_screen.dart';
 import 'package:task_management_app/Screenview/tesk/complate_task_screen.dart';
 import 'package:task_management_app/Screenview/tesk/new_task_screen.dart';
 import 'package:task_management_app/Screenview/tesk/progress_task_screen.dart';
 
-// ignore: camel_case_types
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+// Controller
+class HomeController extends GetxController {
+  var selectedIndex = 0.obs;
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _screen = [
+  final List<Widget> screens = [
     NewTaskScreen(),
     ProgressTaskScreen(),
     ComplateTaskScreen(),
     CancelTaskScreen(),
   ];
 
+  void changeTab(int index) {
+    selectedIndex.value = index;
+  }
+}
+
+// HomeScreen
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
+
+  final HomeController controller = Get.put(HomeController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarComponent(),
-      //drawer: ProfileDetailsDrower(),
-      body: _screen[_selectedIndex],
-      bottomNavigationBar: NavigationBar(
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: (index) {
-            _selectedIndex = index;
-            setState(() {});
-          },
-          destinations: [
-            NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-            NavigationDestination(
-                icon: Icon(Icons.download_sharp), label: "Progress"),
-            NavigationDestination(icon: Icon(Icons.done), label: "Complated"),
-            NavigationDestination(icon: Icon(Icons.cancel), label: "Cancelled"),
-          ]),
+      body: Obx(() => controller.screens[controller.selectedIndex.value]),
+      bottomNavigationBar: Obx(
+        () => Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
+          ),
+          child: NavigationBar(
+            height: 70,
+            selectedIndex: controller.selectedIndex.value,
+            onDestinationSelected: controller.changeTab,
+            labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+            animationDuration: Duration(milliseconds: 400),
+            destinations: [
+              NavigationDestination(
+                icon: Icon(Icons.home_outlined),
+                selectedIcon: Icon(Icons.home, color: Colors.blue),
+                label: "Home",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.download_sharp),
+                selectedIcon: Icon(Icons.download, color: Colors.green),
+                label: "Progress",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.done),
+                selectedIcon: Icon(Icons.done_all, color: Colors.purple),
+                label: "Completed",
+              ),
+              NavigationDestination(
+                icon: Stack(
+                  children: [
+                    Icon(Icons.cancel_outlined),
+                    Positioned(
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '!',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                selectedIcon: Icon(Icons.cancel, color: Colors.red),
+                label: "Cancelled",
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

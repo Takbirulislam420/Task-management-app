@@ -55,7 +55,10 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 IconButton(
                   onPressed: () => _onTapLogOutButton(context),
-                  icon: Icon(Icons.logout),
+                  icon: Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                  ),
                 )
               ],
             );

@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/splash_screen.dart';
-import 'package:task_management_app/const/app_colors.dart';
 import 'package:task_management_app/const/app_string.dart';
 import 'package:task_management_app/controller_binder.dart';
+import 'package:task_management_app/myapp_theme.dart';
 
 class TaskManagementApp extends StatefulWidget {
   const TaskManagementApp({super.key});
@@ -26,56 +26,8 @@ class _TaskManagementAppState extends State<TaskManagementApp> {
       initialBinding: ControllerBinder(),
 
       debugShowCheckedModeBanner: true,
-      theme: ThemeData(
-        colorSchemeSeed: Colors.amber,
-        inputDecorationTheme: InputDecorationTheme(
-            hintStyle:
-                TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-            border: InputBorder.none),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-              fixedSize: Size.fromWidth(double.maxFinite),
-              backgroundColor: AppColors.submitButton,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              )),
-        ),
-        textTheme: TextTheme(
-            titleLarge: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Poppins_Regular')),
-      ),
-      darkTheme: ThemeData(
-        primarySwatch: Colors.amber,
-        inputDecorationTheme: InputDecorationTheme(
-            alignLabelWithHint: true,
-            hintStyle:
-                TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-            border: InputBorder.none),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-              fixedSize: Size.fromWidth(double.maxFinite),
-              backgroundColor: Colors.green,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              )),
-        ),
-        textTheme: TextTheme(
-          titleLarge: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w400,
-              fontFamily: 'Poppins_Regular'),
-        ),
-      ),
+      theme: MyappTheme.lightTheme,
+      darkTheme: MyappTheme.darkTheme,
       color: Colors.blue,
       home: SplashScreenView(),
       // initialRoute: "/",

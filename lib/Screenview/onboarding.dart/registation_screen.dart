@@ -1,10 +1,12 @@
 // ignore: file_names
+import 'package:get/get.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
+import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
 import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
@@ -232,6 +234,7 @@ class _RegistationScreenState extends State<RegistationScreen> {
     if (response.isSuccess) {
       // ignore: use_build_context_synchronously
       showSnackbarMessage(context, "Registation successfull");
+      Get.offAll(LoginScreen());
     } else {
       // ignore: use_build_context_synchronously
       showSnackbarMessage(context, response.errorMessage, true);

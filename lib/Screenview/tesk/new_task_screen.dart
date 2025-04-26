@@ -38,7 +38,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
         onPressed: _onPressFloatingButton,
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
       body: BackgroundComponent(
         child: SingleChildScrollView(
@@ -65,13 +68,14 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                                   context: context,
                                   title: "Confirm Delete",
                                   message:
-                                      "Are you sure you want to delete this task?",
+                                      "Are you sure you want to delete this task???",
                                   onOk: () {
                                     SuccessToast("User confirmed delete");
                                     // Proceed with deletion logic
                                   },
                                   onCancel: () {
-                                    SuccessToast("User cancelled delete");
+                                    SuccessToast(
+                                        "User cancelled delete${controller.newTaskList[index]}");
                                     // Maybe show a message or do nothing
                                   },
                                 );
@@ -100,10 +104,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   }
 
   void _onPressFloatingButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => AddNewTaskScreen()),
-    );
+    Get.to(AddNewTaskScreen());
   }
 
   Widget buildSummarySection() {

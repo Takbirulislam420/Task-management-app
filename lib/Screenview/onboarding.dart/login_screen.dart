@@ -70,32 +70,43 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 TextFormField(
                   obscureText: _isObscured,
+                  controller: _passwordController,
                   keyboardType: TextInputType.visiblePassword,
                   textInputAction: TextInputAction.done,
-                  controller: _passwordController,
                   textAlign: TextAlign.start,
                   decoration: InputDecoration(
-                      //labelText: 'Password',
-                      hintText: AppString.passwordHintText,
-                      suffixIcon: IconButton(
+                    hintText: AppString.passwordHintText,
+                    // border: OutlineInputBorder(
+                    //   borderRadius: BorderRadius.circular(10),),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 12), // fixes vertical alignment
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(
+                          right: 8.0), // optional, for better spacing
+                      child: IconButton(
                         onPressed: () {
                           setState(() {
-                            _isObscured =
-                                !_isObscured; // Toggle password visibility
+                            _isObscured = !_isObscured;
                           });
                         },
                         icon: Icon(
                           _isObscured ? Icons.visibility_off : Icons.visibility,
                           color: Colors.grey,
                         ),
-                      )),
+                      ),
+                    ),
+                    suffixIconConstraints: BoxConstraints(
+                      minHeight: 40,
+                      minWidth: 40,
+                    ),
+                  ),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (String? value) {
-                    if ((value?.isEmpty ?? true) || (value!.length < 6)) {
-                      return "Enter your Password";
-                    } else {
-                      return null;
+                    if ((value?.isEmpty ?? true) || value!.length < 6) {
+                      return "Enter a valid password (min. 6 characters)";
                     }
+                    return null;
                   },
                 ),
                 SizedBox(
@@ -160,14 +171,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _logInUser() async {
     final bool isSuccess = await _loginController.logInUser(
         _emailController.text.trim(), _passwordController.text);
-
     if (isSuccess) {
-      // showSnackbarMessage(context, "Login successfull");
-      Navigator.pushAndRemoveUntil(
-          // ignore: use_build_context_synchronously
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-          (pre) => false);
+      Get.offAll(HomeScreen());
     } else {
       // ignore: use_build_context_synchronously
       showSnackbarMessage(context, _loginController.errorMessage!, true);
@@ -175,18 +180,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _ontapSingUpButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => RegistationScreen()),
-    );
+    Get.to(RegistationScreen());
   }
 
   void _ontapForgetPasswordButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => ForgetPasswordVerifyEmailScreen()),
-    );
+    Get.to(ForgetPasswordVerifyEmailScreen());
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
@@ -136,13 +137,7 @@ class _ForgetPasswordVerifyEmailScreenState
 
     if (response.isSuccess) {
       SuccessToast("A 6 digit OTP code sent to your email");
-      Navigator.push(
-        // ignore: use_build_context_synchronously
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ForgetPasswordPinVerificationScreen(userEmail)),
-      );
+      Get.to(ForgetPasswordPinVerificationScreen(userEmail));
     } else {
       // ignore: use_build_context_synchronously
       showSnackbarMessage(context, response.errorMessage, true);

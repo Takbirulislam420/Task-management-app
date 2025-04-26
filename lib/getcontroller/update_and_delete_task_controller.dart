@@ -4,47 +4,51 @@ import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/utils/api_urls.dart';
 
 class UpdateAndDeleteTaskController extends GetxController {
-  bool _updateAndDeleteTaskInProgress = false;
-  String? _errorMessage;
-
-  bool get updateAndDeleteTaskInProgress => _updateAndDeleteTaskInProgress;
-  String? get errorMessage => _errorMessage;
+  // Map to store the loading state for each task
+  var taskLoadingStates = <String, RxBool>{};
 
   Future<bool> getUpdateTaskStatus(String id, String taskstatus) async {
-    bool isSuccess = false;
-    _updateAndDeleteTaskInProgress = true;
+    // Set the task's loading state to true
+    taskLoadingStates[id] = true.obs;
     update();
 
     final NetworkResponse response = await NetworkClient.getRequest(
         url: ApiUrls.updateStatusTaskUrl(id, taskstatus));
 
-    if (response.isSuccess) {
-      isSuccess = true;
-      _errorMessage = null;
+    bool isSuccess = response.isSuccess;
+    if (isSuccess) {
+      taskLoadingStates[id] =
+          false.obs; // Set loading state to false after success
+      update();
     } else {
-      _errorMessage = response.errorMessage;
+      taskLoadingStates[id] = false.obs;
+      update();
     }
-    _updateAndDeleteTaskInProgress = false;
-    update();
     return isSuccess;
   }
 
   Future<bool> getDeleteTaskStatus(String id) async {
-    bool isSuccess = false;
-    _updateAndDeleteTaskInProgress = true;
+    // Set the task's loading state to true
+    taskLoadingStates[id] = true.obs;
     update();
 
     final NetworkResponse response =
         await NetworkClient.getRequest(url: ApiUrls.deleteTaskUrl(id));
 
-    if (response.isSuccess) {
-      isSuccess = true;
-      _errorMessage = null;
+    bool isSuccess = response.isSuccess;
+    if (isSuccess) {
+      taskLoadingStates[id] =
+          false.obs; // Set loading state to false after success
+      update();
     } else {
-      _errorMessage = response.errorMessage;
+      taskLoadingStates[id] = false.obs;
+      update();
     }
-    _updateAndDeleteTaskInProgress = false;
-    update();
     return isSuccess;
+  }
+
+  RxBool getTaskLoadingState(String id) {
+    return taskLoadingStates[id] ??
+        false.obs; // Return the loading state for a task
   }
 }
