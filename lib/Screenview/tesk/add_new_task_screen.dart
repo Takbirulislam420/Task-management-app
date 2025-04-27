@@ -6,7 +6,7 @@ import 'package:task_management_app/Screenview/Components/center_circular_progre
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/const/app_string.dart';
-import 'package:task_management_app/getcontroller/add_new_task_controller.dart';
+import 'package:task_management_app/controller/task_controller/add_new_task_controller.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key});

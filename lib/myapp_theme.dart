@@ -4,6 +4,17 @@ import 'package:task_management_app/const/app_colors.dart';
 class MyappTheme {
   static final ThemeData lightTheme = ThemeData(
     colorSchemeSeed: Colors.amber,
+    iconTheme: IconThemeData(
+      color: Colors.white, // All icons will be white
+    ),
+    appBarTheme: const AppBarTheme(
+      iconTheme: IconThemeData(color: Colors.white), // AppBar icons white
+      titleTextStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 20), // AppBar title text white (optional)
+      backgroundColor: Colors.transparent, // or your desired color
+      elevation: 0,
+    ),
     inputDecorationTheme: const InputDecorationTheme(
       hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
       filled: true,
@@ -32,6 +43,17 @@ class MyappTheme {
 
   static final ThemeData darkTheme = ThemeData(
     primarySwatch: Colors.amber,
+    iconTheme: IconThemeData(
+      color: Colors.white, // All icons will be white
+    ),
+    appBarTheme: const AppBarTheme(
+      iconTheme: IconThemeData(color: Colors.white), // AppBar icons white
+      titleTextStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 20), // AppBar title text white (optional)
+      backgroundColor: Colors.transparent, // or your desired color
+      elevation: 0,
+    ),
     inputDecorationTheme: const InputDecorationTheme(
       alignLabelWithHint: true,
       hintStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),

@@ -6,10 +6,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:task_management_app/Screenview/Components/app_bar_component.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
-import 'package:task_management_app/Screenview/controller/auth_controller.dart';
+import 'package:task_management_app/controller/onboarding_controller/auth_controller.dart';
 import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/const/app_string.dart';
-import 'package:task_management_app/getcontroller/update_profile_controller.dart';
+import 'package:task_management_app/controller/profile_controller/update_profile_controller.dart';
 import '../../data/model/user_model.dart';
 
 class UpdateProfileScreen extends StatefulWidget {

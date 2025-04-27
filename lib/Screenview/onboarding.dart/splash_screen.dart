@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
-import 'package:task_management_app/Screenview/controller/auth_controller.dart';
+import 'package:task_management_app/controller/onboarding_controller/auth_controller.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
 import 'package:task_management_app/Screenview/tesk/home_screen.dart';
 import 'package:task_management_app/const/app_image_path.dart';

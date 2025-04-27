@@ -4,7 +4,7 @@ import 'package:task_management_app/Screenview/Components/background_component.d
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/Components/task_card_widget.dart';
-import 'package:task_management_app/getcontroller/progress_controller.dart';
+import 'package:task_management_app/controller/task_controller/progress_controller.dart';
 
 class ProgressTaskScreen extends StatefulWidget {
   const ProgressTaskScreen({super.key});

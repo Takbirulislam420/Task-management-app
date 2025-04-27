@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/Components/task_card_widget.dart';
-import 'package:task_management_app/getcontroller/complated_task_controller.dart';
+import 'package:task_management_app/controller/task_controller/complated_task_controller.dart';
 
 class ComplateTaskScreen extends StatefulWidget {
   const ComplateTaskScreen({super.key});

@@ -10,7 +10,7 @@ import 'package:task_management_app/Screenview/onboarding.dart/registation_Scree
 import 'package:task_management_app/Screenview/tesk/home_screen.dart';
 import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/const/app_string.dart';
-import 'package:task_management_app/getcontroller/login_controller.dart';
+import 'package:task_management_app/controller/onboarding_controller/login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

@@ -9,8 +9,8 @@ import 'package:task_management_app/Screenview/Components/task_card_widget.dart'
 import 'package:task_management_app/Screenview/style_&_function/my_custom_function.dart';
 import 'package:task_management_app/Screenview/style_&_function/style.dart';
 import 'package:task_management_app/Screenview/tesk/add_new_task_screen.dart';
-import 'package:task_management_app/getcontroller/new_task_controller.dart';
-import 'package:task_management_app/getcontroller/task_status_count_controller.dart';
+import 'package:task_management_app/controller/task_controller/new_task_controller.dart';
+import 'package:task_management_app/controller/task_controller/task_status_count_controller.dart';
 
 class NewTaskScreen extends StatefulWidget {
   const NewTaskScreen({super.key});

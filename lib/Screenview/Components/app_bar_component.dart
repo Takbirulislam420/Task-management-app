@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_management_app/Screenview/controller/auth_controller.dart';
+import 'package:task_management_app/controller/onboarding_controller/auth_controller.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
 import 'package:task_management_app/Screenview/profile/update_profile_screen.dart';
 

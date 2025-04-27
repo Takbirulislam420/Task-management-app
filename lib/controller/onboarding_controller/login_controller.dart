@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:task_management_app/Screenview/controller/auth_controller.dart';
+import 'package:task_management_app/controller/onboarding_controller/auth_controller.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/model/login_model.dart';

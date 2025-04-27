@@ -1,14 +1,15 @@
 import 'package:get/get.dart';
-import 'package:task_management_app/Screenview/controller/auth_controller.dart';
-import 'package:task_management_app/getcontroller/add_new_task_controller.dart';
-import 'package:task_management_app/getcontroller/cancelled_task_controller.dart';
-import 'package:task_management_app/getcontroller/complated_task_controller.dart';
-import 'package:task_management_app/getcontroller/login_controller.dart';
-import 'package:task_management_app/getcontroller/new_task_controller.dart';
-import 'package:task_management_app/getcontroller/progress_controller.dart';
-import 'package:task_management_app/getcontroller/task_status_count_controller.dart';
-import 'package:task_management_app/getcontroller/update_and_delete_task_controller.dart';
-import 'package:task_management_app/getcontroller/update_profile_controller.dart';
+import 'package:task_management_app/controller/onboarding_controller/auth_controller.dart';
+import 'package:task_management_app/controller/task_controller/add_new_task_controller.dart';
+import 'package:task_management_app/controller/task_controller/cancelled_task_controller.dart';
+import 'package:task_management_app/controller/task_controller/complated_task_controller.dart';
+import 'package:task_management_app/controller/onboarding_controller/login_controller.dart';
+import 'package:task_management_app/controller/task_controller/home_controller.dart';
+import 'package:task_management_app/controller/task_controller/new_task_controller.dart';
+import 'package:task_management_app/controller/task_controller/progress_controller.dart';
+import 'package:task_management_app/controller/task_controller/task_status_count_controller.dart';
+import 'package:task_management_app/controller/task_controller/update_and_delete_task_controller.dart';
+import 'package:task_management_app/controller/profile_controller/update_profile_controller.dart';
 
 class ControllerBinder extends Bindings {
   @override
@@ -23,5 +24,6 @@ class ControllerBinder extends Bindings {
     Get.put(UpdateAndDeleteTaskController());
     Get.put(UpdateProfileController());
     Get.put(AuthController());
+    Get.put(HomeController());
   }
 }

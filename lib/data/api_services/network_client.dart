@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
-import 'package:task_management_app/Screenview/controller/auth_controller.dart';
+import 'package:task_management_app/controller/onboarding_controller/auth_controller.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
 import 'package:task_management_app/TaskManagementApp.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
