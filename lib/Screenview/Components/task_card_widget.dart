@@ -69,11 +69,15 @@ class TaskCardWidget extends StatelessWidget {
                           children: [
                             IconButton(
                               onPressed: _showUpdateStatusDialog,
-                              icon: const Icon(Icons.edit),
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Colors.black,
+                              ),
                             ),
                             IconButton(
                               onPressed: _deleteTask,
-                              icon: const Icon(Icons.delete),
+                              icon:
+                                  const Icon(Icons.delete, color: Colors.black),
                             ),
                           ],
                         ),

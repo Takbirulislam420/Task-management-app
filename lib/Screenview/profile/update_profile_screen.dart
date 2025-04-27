@@ -269,7 +269,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       // ignore: use_build_context_synchronously
       showSnackbarMessage(context, "Your profile updated successfully");
 
-      // Go back to the previous screen
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
     } else {
