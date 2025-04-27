@@ -115,14 +115,14 @@ class RegistrationController extends GetxController {
     }
   }
 
-  @override
-  void onClose() {
-    emailController.dispose();
-    fnameController.dispose();
-    lnameController.dispose();
-    phoneController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-    super.onClose();
-  }
+  // @override
+  // void onClose() {
+  //   emailController.dispose();
+  //   fnameController.dispose();
+  //   lnameController.dispose();
+  //   phoneController.dispose();
+  //   passwordController.dispose();
+  //   confirmPasswordController.dispose();
+  //   super.onClose();
+  // }
 }

@@ -1,16 +1,10 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
-import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
-import 'package:task_management_app/Screenview/onboarding.dart/forget_password_pin_verification_screen.dart';
-import 'package:task_management_app/Screenview/style_&_function/style.dart';
 import 'package:task_management_app/const/app_int.dart';
-import 'package:task_management_app/data/api_services/network_client.dart';
-import 'package:task_management_app/data/api_services/network_response.dart';
-import 'package:task_management_app/data/utils/api_urls.dart';
+import 'package:task_management_app/controller/onboarding_controller/email_verify_controller.dart';
 
 class ForgetPasswordVerifyEmailScreen extends StatefulWidget {
   const ForgetPasswordVerifyEmailScreen({super.key});
@@ -21,9 +15,9 @@ class ForgetPasswordVerifyEmailScreen extends StatefulWidget {
 
 class _ForgetPasswordVerifyEmailScreenState
     extends State<ForgetPasswordVerifyEmailScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  bool _emailVerifyInProgress = false;
+  final EmailVerifyController emailVerifyController =
+      Get.find<EmailVerifyController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +27,7 @@ class _ForgetPasswordVerifyEmailScreenState
         padding: EdgeInsets.all(AppInt.padding),
         child: SingleChildScrollView(
           child: Form(
-            key: _formkey,
+            key: emailVerifyController.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -54,36 +48,24 @@ class _ForgetPasswordVerifyEmailScreenState
                 ),
                 TextFormField(
                   textInputAction: TextInputAction.done,
-                  controller: _emailController,
+                  controller: emailVerifyController.emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: "Email",
                   ),
-                  validator: (String? value) {
-                    String email = value?.trim() ?? '';
-                    if (EmailValidator.validate(email) == false) {
-                      return "Enter your Email";
-                    } else {
-                      return null;
-                    }
-                  },
+                  validator: emailVerifyController.validateEmail,
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                Visibility(
-                  visible: _emailVerifyInProgress == false,
-                  replacement: CenterCircularProgressIndecator(),
-                  child: ElevatedButton(
-                      onPressed: _onTapEmailverificationButton,
-                      child: Text("Submit")),
-                ),
-                SizedBox(
-                  height: 25,
-                ),
+                const SizedBox(height: 15),
+                Obx(() => emailVerifyController.isLoading.value
+                    ? const CenterCircularProgressIndecator()
+                    : ElevatedButton(
+                        onPressed: emailVerifyController.submitEmail,
+                        child: const Text("Submit"),
+                      )),
+                const SizedBox(height: 25),
                 Center(
                   child: Column(
                     children: [
@@ -117,36 +99,5 @@ class _ForgetPasswordVerifyEmailScreenState
 
   void _ontapSinginButton() {
     Navigator.pop(context);
-  }
-
-  void _onTapEmailverificationButton() {
-    if (_formkey.currentState!.validate()) {
-      emailVerification();
-    }
-  }
-
-  Future<void> emailVerification() async {
-    _emailVerifyInProgress = true;
-    String userEmail = _emailController.text.trim();
-    setState(() {});
-
-    NetworkResponse response =
-        await NetworkClient.getRequest(url: ApiUrls.emailVerifyUrl + userEmail);
-    _emailVerifyInProgress = false;
-    setState(() {});
-
-    if (response.isSuccess) {
-      SuccessToast("A 6 digit OTP code sent to your email");
-      Get.to(ForgetPasswordPinVerificationScreen(userEmail));
-    } else {
-      // ignore: use_build_context_synchronously
-      showSnackbarMessage(context, response.errorMessage, true);
-    }
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
   }
 }
