@@ -8,8 +8,8 @@ import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/utils/api_urls.dart';
 
 class PinVerificationController extends GetxController {
-  final String email;
-  PinVerificationController(this.email);
+  late String verifyEmail;
+  PinVerificationController(this.verifyEmail);
 
   final TextEditingController pinVerifyController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -23,18 +23,18 @@ class PinVerificationController extends GetxController {
 
   Future<void> pinVerification() async {
     pinVerifyInProgress.value = true;
-    String verifyPin = "/${pinVerifyController.text.trim()}";
-    String verifyPinForNav = pinVerifyController.text.trim();
+    String verifyPin = pinVerifyController.text.trim();
 
     NetworkResponse response = await NetworkClient.getRequest(
-        url: ApiUrls.recoverVerifyOtpUrl + email + verifyPin);
+        url: ApiUrls.recoverVerifyOtpUrl(verifyEmail, verifyPin));
 
     pinVerifyInProgress.value = false;
 
     if (response.isSuccess) {
       Get.snackbar("Success", "OTP Successfully verified",
           backgroundColor: Colors.green);
-      Get.to(() => ResetPasswordScreen(email, verifyPinForNav));
+      //Get.to(() => ResetPasswordScreen(email, verifyPinForNav));
+      Get.to(ResetPasswordScreen(verifyEmail, verifyPin));
     } else {
       showSnackbarMessage(Get.context!, response.errorMessage, true);
     }
