@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:task_management_app/const/app_string.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/utils/api_urls.dart';
@@ -16,7 +17,7 @@ class EmailVerifyController extends GetxController {
   String? validateEmail(String? value) {
     String email = value?.trim() ?? '';
     if (!EmailValidator.validate(email)) {
-      return 'Enter a valid email address';
+      return AppString.enterValidEmail;
     }
     return null;
   }
@@ -37,8 +38,8 @@ class EmailVerifyController extends GetxController {
 
     if (response.isSuccess) {
       Get.snackbar(
-        "Success",
-        "A 6-digit OTP code sent to your email",
+        AppString.successText,
+        AppString.sendOtpText,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.black,
         colorText: Colors.white,

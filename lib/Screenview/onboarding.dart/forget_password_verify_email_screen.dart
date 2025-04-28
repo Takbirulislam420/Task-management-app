@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/const/app_int.dart';
+import 'package:task_management_app/const/app_string.dart';
 import 'package:task_management_app/controller/onboarding_controller/email_verify_controller.dart';
 
 class ForgetPasswordVerifyEmailScreen extends StatefulWidget {
@@ -33,11 +34,11 @@ class _ForgetPasswordVerifyEmailScreenState
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Your Email address",
+                  AppString.yourEmailAddressText,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text(
-                  "A six digit verification pin will be send to your email",
+                  AppString.verificationPinWillSendText,
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge
@@ -51,7 +52,7 @@ class _ForgetPasswordVerifyEmailScreenState
                   controller: emailVerifyController.emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    hintText: "Email",
+                    hintText: AppString.emailHintText,
                   ),
                   validator: emailVerifyController.validateEmail,
                 ),
@@ -63,7 +64,7 @@ class _ForgetPasswordVerifyEmailScreenState
                     ? const CenterCircularProgressIndecator()
                     : ElevatedButton(
                         onPressed: emailVerifyController.submitEmail,
-                        child: const Text("Submit"),
+                        child: Text(AppString.submit),
                       )),
                 const SizedBox(height: 25),
                 Center(
@@ -76,9 +77,9 @@ class _ForgetPasswordVerifyEmailScreenState
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14),
                               children: [
-                            TextSpan(text: " have account?"),
+                            TextSpan(text: AppString.alreadyHaveAccount),
                             TextSpan(
-                              text: "Sing in",
+                              text: AppString.loginButtonText,
                               style: TextStyle(
                                   color: Colors.green,
                                   fontWeight: FontWeight.bold),

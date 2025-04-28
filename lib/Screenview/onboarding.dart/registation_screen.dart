@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/const/app_int.dart';
+import 'package:task_management_app/const/app_string.dart';
 import 'package:task_management_app/controller/onboarding_controller/registation_controller.dart';
 
 class RegistationScreen extends StatefulWidget {
@@ -34,7 +35,7 @@ class _RegistationScreenState extends State<RegistationScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Join with us",
+                    AppString.joinWithUs,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   SizedBox(
@@ -45,7 +46,7 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     keyboardType: TextInputType.emailAddress,
                     controller: _registrationController.emailController,
                     decoration: InputDecoration(
-                      hintText: "Email",
+                      hintText: AppString.emailHintText,
                     ),
                     validator: _registrationController.validateEmail,
                   ),
@@ -57,11 +58,12 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     textInputAction: TextInputAction.next,
                     controller: _registrationController.fnameController,
                     decoration: InputDecoration(
-                      hintText: "First name",
+                      hintText: AppString.firstNameText,
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) => _registrationController
-                        .validateName(value, fieldName: "First Name"),
+                    validator: (value) => _registrationController.validateName(
+                        value,
+                        fieldName: AppString.firstNameText),
                   ),
                   SizedBox(
                     height: 10,
@@ -71,11 +73,11 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     textInputAction: TextInputAction.next,
                     controller: _registrationController.lnameController,
                     decoration: InputDecoration(
-                      hintText: "Last name",
+                      hintText: AppString.lastNameText,
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) => _registrationController
-                        .validateName(value, fieldName: "Last Name"),
+                        .validateName(value, fieldName: AppString.lastNameText),
                   ),
                   SizedBox(
                     height: 10,
@@ -85,7 +87,7 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     textInputAction: TextInputAction.next,
                     controller: _registrationController.phoneController,
                     decoration: InputDecoration(
-                      hintText: "mobile",
+                      hintText: AppString.enterMobileNumber,
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: _registrationController.validateMobile,
@@ -98,7 +100,7 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     textInputAction: TextInputAction.next,
                     controller: _registrationController.passwordController,
                     decoration: InputDecoration(
-                      hintText: "Password",
+                      hintText: AppString.passwordHintText,
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: _registrationController.validatePassword,
@@ -113,7 +115,7 @@ class _RegistationScreenState extends State<RegistationScreen> {
                     controller:
                         _registrationController.confirmPasswordController,
                     decoration: InputDecoration(
-                      hintText: "Confirm password",
+                      hintText: AppString.confirmPasswordRequired,
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: _registrationController.validateConfirmPassword,
@@ -127,7 +129,7 @@ class _RegistationScreenState extends State<RegistationScreen> {
                         ? CenterCircularProgressIndecator()
                         : ElevatedButton(
                             onPressed: _registrationController.registerUser,
-                            child: Text("Sign up"),
+                            child: Text(AppString.singUp),
                           );
                   }),
                   SizedBox(
@@ -143,9 +145,9 @@ class _RegistationScreenState extends State<RegistationScreen> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14),
                                 children: [
-                              TextSpan(text: "have you account?"),
+                              TextSpan(text: AppString.alreadyHaveAccount),
                               TextSpan(
-                                text: " Sing in",
+                                text: AppString.loginButtonText,
                                 style: TextStyle(
                                     color: Colors.green,
                                     fontWeight: FontWeight.bold),

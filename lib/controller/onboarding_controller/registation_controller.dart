@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
+import 'package:task_management_app/const/app_string.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/utils/api_urls.dart';
@@ -22,11 +23,11 @@ class RegistrationController extends GetxController {
 
   String? validateEmail(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Email is required';
+      return AppString.emailRequiredText;
     } else if (value.trim().length > 30) {
-      return 'Email must not exceed 20 characters';
+      return AppString.emailNotMoreThenTweenty;
     } else if (!EmailValidator.validate(value.trim())) {
-      return 'Enter a valid email';
+      return AppString.enterValidEmail;
     }
     return null;
   }
@@ -44,31 +45,31 @@ class RegistrationController extends GetxController {
 
   String? validateMobile(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Mobile number is required';
+      return AppString.mobileRequiredText;
     }
     return null;
   }
 
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Password is required';
+      return AppString.passwordRequired;
     } else if (value.length < 4) {
-      return 'Password must be at least 4 characters';
+      return AppString.passwordMinimumLength;
     } else if (value.length > 15) {
-      return 'Password must not exceed 15 characters';
+      return AppString.passwordMaximumLength;
     }
     return null;
   }
 
   String? validateConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Confirm password is required';
+      return AppString.confirmPasswordRequired;
     } else if (value.length < 4) {
-      return 'Password must be at least 4 characters';
+      return AppString.passwordMinimumLength;
     } else if (value.length > 15) {
-      return 'Password must not exceed 15 characters';
+      return AppString.passwordMaximumLength;
     } else if (value != passwordController.text) {
-      return 'Passwords do not match';
+      return AppString.passwordNOtMatch;
     }
     return null;
   }
@@ -94,8 +95,8 @@ class RegistrationController extends GetxController {
       isLoading.value = false;
       _errorMessage = null;
       Get.snackbar(
-        'Success',
-        'Registration Successful!',
+        AppString.successText,
+        AppString.registrationSuccessfullText,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.black,
         colorText: Colors.white,
@@ -106,7 +107,7 @@ class RegistrationController extends GetxController {
       isLoading.value = false;
       _errorMessage = response.errorMessage;
       Get.snackbar(
-        'Unsuccesfull',
+        AppString.unSuccessText,
         _errorMessage!,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.black,
@@ -115,7 +116,7 @@ class RegistrationController extends GetxController {
     }
   }
 
-  // @override
+  // @override   // not need to use ondispose/onClose because getx will be handel it.
   // void onClose() {
   //   emailController.dispose();
   //   fnameController.dispose();

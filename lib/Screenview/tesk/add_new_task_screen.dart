@@ -55,7 +55,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                   ),
                   validator: (String? value) {
                     if (value?.trim().isEmpty ?? true) {
-                      return "Enter a title here";
+                      return AppString.titleText;
                     } else {
                       return null;
                     }
@@ -75,7 +75,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                           EdgeInsets.symmetric(horizontal: 10, vertical: 8)),
                   validator: (String? value) {
                     if (value?.trim().isEmpty ?? true) {
-                      return "Enter a discription here";
+                      return AppString.descriptionText;
                     } else {
                       return null;
                     }
@@ -117,7 +117,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
     if (isSuccess) {
       _clearTextFields();
       // ignore: use_build_context_synchronously
-      showSnackbarMessage(context, "create task successfull");
+      showSnackbarMessage(context, AppString.createTaskSuccessfull);
     } else {
       // ignore: use_build_context_synchronously
       showSnackbarMessage(context, _addNewTaskController.errorMessage!, true);

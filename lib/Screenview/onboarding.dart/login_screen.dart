@@ -13,6 +13,7 @@ import 'package:task_management_app/const/app_string.dart';
 import 'package:task_management_app/controller/onboarding_controller/login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
+  //another way to use getx
   const LoginScreen({super.key});
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -59,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   validator: (String? value) {
                     String email = value?.trim() ?? '';
                     if (EmailValidator.validate(email) == false) {
-                      return "Enter your Email";
+                      return AppString.emailHintText;
                     } else {
                       return null;
                     }
@@ -104,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (String? value) {
                     if ((value?.isEmpty ?? true) || value!.length < 6) {
-                      return "Enter a valid password (min. 6 characters)";
+                      return AppString.errorEmailText;
                     }
                     return null;
                   },

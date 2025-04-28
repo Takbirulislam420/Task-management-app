@@ -5,6 +5,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/const/app_int.dart';
+import 'package:task_management_app/const/app_string.dart';
 import 'package:task_management_app/controller/onboarding_controller/pin_verification_controller.dart';
 
 class ForgetPasswordPinVerificationScreen extends StatelessWidget {
@@ -28,11 +29,11 @@ class ForgetPasswordPinVerificationScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Pin verification",
+                      AppString.pinVerification,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Text(
-                      "A six digit verification pin has been sent to your email.",
+                      AppString.sendOtpTextui,
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge
@@ -62,7 +63,7 @@ class ForgetPasswordPinVerificationScreen extends StatelessWidget {
                         ? CenterCircularProgressIndecator()
                         : ElevatedButton(
                             onPressed: controller.onTapSubmitButton,
-                            child: Text("Verify"),
+                            child: Text(AppString.verifyText),
                           )),
                     SizedBox(height: 25),
                     Center(
@@ -74,9 +75,9 @@ class ForgetPasswordPinVerificationScreen extends StatelessWidget {
                             fontSize: 14,
                           ),
                           children: [
-                            TextSpan(text: "Have an account? "),
+                            TextSpan(text: AppString.alreadyHaveAccount),
                             TextSpan(
-                              text: "Sign in",
+                              text: AppString.loginButtonText,
                               style: TextStyle(
                                 color: Colors.green,
                                 fontWeight: FontWeight.bold,
