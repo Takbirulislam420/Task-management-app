@@ -155,9 +155,9 @@ class _ForgetPasswordPinVerificationScreenState
         MaterialPageRoute(builder: (context) => LoginScreen()), (pre) => false);
   }
 
-  // @override
-  // void dispose() {
-  //   _pinVerifyController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _pinVerifyController.clear();
+    super.dispose();
+  }
 }
