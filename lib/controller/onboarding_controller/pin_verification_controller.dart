@@ -40,6 +40,7 @@ class PinVerificationController extends GetxController {
         'userEmail': verifyEmailFromScreen,
         'userPin': verifyPin
       });
+      // Get.delete<PinVerificationController>();
     } else {
       showSnackbarMessage(Get.context!, response.errorMessage, true);
     }

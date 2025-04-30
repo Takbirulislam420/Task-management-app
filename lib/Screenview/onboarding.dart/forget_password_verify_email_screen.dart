@@ -101,4 +101,10 @@ class _ForgetPasswordVerifyEmailScreenState
   void _ontapSinginButton() {
     Navigator.pop(context);
   }
+
+  // @override
+  // void dispose() {
+  //   emailVerifyController.emailController.dispose();
+  //   super.dispose();
+  // }
 }

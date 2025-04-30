@@ -44,15 +44,17 @@ class EmailVerifyController extends GetxController {
         backgroundColor: Colors.black,
         colorText: Colors.white,
       );
-      Get.to(() => ForgetPasswordPinVerificationScreen(userEmail));
+      Get.to(() => ForgetPasswordPinVerificationScreen(),
+          arguments: {'userEmail': userEmail});
+      // Get.delete<EmailVerifyController>();
     } else {
       showSnackbarMessage(Get.context!, response.errorMessage, true);
     }
   }
 
-  // @override
-  // void onClose() {
-  //   emailController.dispose();
-  //   super.onClose();
-  // }
+  @override
+  void onClose() {
+    emailController.dispose();
+    super.onClose();
+  }
 }

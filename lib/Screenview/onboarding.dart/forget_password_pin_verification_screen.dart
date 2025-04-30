@@ -8,14 +8,17 @@ import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/const/app_string.dart';
 import 'package:task_management_app/controller/onboarding_controller/pin_verification_controller.dart';
 
+// ignore: must_be_immutable
 class ForgetPasswordPinVerificationScreen extends StatelessWidget {
-  final String verifyEmail;
-  const ForgetPasswordPinVerificationScreen(this.verifyEmail, {super.key});
+  ForgetPasswordPinVerificationScreen({super.key});
+
+  final argss = Get.arguments as Map<String, dynamic>;
+  late String email = argss['userEmail'];
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<PinVerificationController>(
-      init: PinVerificationController(verifyEmail),
+      init: PinVerificationController(email),
       builder: (pinVerifyController) => Scaffold(
         body: BackgroundComponent(
           child: Container(

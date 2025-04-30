@@ -8,10 +8,10 @@ import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/utils/api_urls.dart';
 
 class ResetPasswordController extends GetxController {
-  final String email;
-  final String verifyPin;
-
-  ResetPasswordController(this.email, this.verifyPin);
+  static ResetPasswordController get to => Get.put(ResetPasswordController());
+  final args = Get.arguments as Map<String, dynamic>;
+  late String email = args['userEmail'];
+  late String verifyPin = args['userPin'];
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController passwordController = TextEditingController();
@@ -75,10 +75,10 @@ class ResetPasswordController extends GetxController {
     }
   }
 
-  // @override  //not need use in getx controller ,getx will handel this
-  // void onClose() {
-  //   passwordController.dispose();
-  //   confirmPasswordController.dispose();
-  //   super.onClose();
-  // }
+  @override //not need use in getx controller ,getx will handel this
+  void onClose() {
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.onClose();
+  }
 }

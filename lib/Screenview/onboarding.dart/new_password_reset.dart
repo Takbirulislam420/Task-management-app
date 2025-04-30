@@ -7,6 +7,7 @@ import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
 import 'package:task_management_app/Screenview/style_&_function/style.dart';
 import 'package:task_management_app/const/app_int.dart';
+import 'package:task_management_app/const/app_string.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/utils/api_urls.dart';
@@ -27,6 +28,7 @@ class _NewPasswordResetState extends State<NewPasswordReset> {
       TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   bool _resetPasswordInProgress = false;
+  bool _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -50,25 +52,80 @@ class _NewPasswordResetState extends State<NewPasswordReset> {
                   height: 15,
                 ),
                 TextFormField(
-                  obscureText: true,
-                  keyboardType: TextInputType.visiblePassword,
-                  textInputAction: TextInputAction.next,
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    hintText: "New Password",
-                  ),
-                ),
+                    obscureText: false,
+                    controller: _passwordController,
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.next,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                      hintText: AppString.passwordHintText,
+                      // border: OutlineInputBorder(
+                      //   borderRadius: BorderRadius.circular(10),),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 12), // fixes vertical alignment
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (String? value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Password is required';
+                      } else if (value.trim().length < 4) {
+                        return 'Password must be at least 4 characters';
+                      } else if (value.trim().length > 15) {
+                        return 'Password must not exceed 15 characters';
+                      }
+                      return null;
+                    }),
                 SizedBox(
-                  height: 10,
+                  height: 15,
                 ),
                 TextFormField(
-                  obscureText: true,
-                  keyboardType: TextInputType.visiblePassword,
-                  textInputAction: TextInputAction.done,
-                  controller: _confirmpasswordController,
-                  decoration: InputDecoration(
-                    hintText: "Confirm new Password",
-                  ),
+                    obscureText: _isObscured,
+                    controller: _confirmpasswordController,
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.done,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                      hintText: AppString.passwordHintText,
+                      // border: OutlineInputBorder(
+                      //   borderRadius: BorderRadius.circular(10),),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 12), // fixes vertical alignment
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.only(
+                            right: 8.0), // optional, for better spacing
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isObscured = !_isObscured;
+                            });
+                          },
+                          icon: Icon(
+                            _isObscured
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                      suffixIconConstraints: BoxConstraints(
+                        minHeight: 40,
+                        minWidth: 40,
+                      ),
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (String? value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Confirm password is required';
+                      } else if (value.trim() !=
+                          _passwordController.text.trim()) {
+                        return 'Passwords do not match';
+                      }
+                      return null;
+                    }),
+                SizedBox(
+                  height: 10,
                 ),
                 SizedBox(
                   height: 15,

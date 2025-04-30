@@ -65,7 +65,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                   height: 10,
                 ),
                 TextFormField(
-                  textInputAction: TextInputAction.done,
+                  textInputAction: TextInputAction.newline,
                   controller: _descriptionController,
                   maxLines: 7,
                   //textAlign: TextAlign.start,
