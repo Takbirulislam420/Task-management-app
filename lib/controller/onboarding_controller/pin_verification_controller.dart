@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart';
-import 'package:task_management_app/Screenview/onboarding.dart/reset_password_screen.dart';
+import 'package:task_management_app/Screenview/onboarding.dart/new_password_reset.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/utils/api_urls.dart';
 
 class PinVerificationController extends GetxController {
-  late String verifyEmail;
-  PinVerificationController(this.verifyEmail);
+  late String verifyEmailFromScreen;
+  PinVerificationController(this.verifyEmailFromScreen);
 
   final TextEditingController pinVerifyController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -26,15 +26,20 @@ class PinVerificationController extends GetxController {
     String verifyPin = pinVerifyController.text.trim();
 
     NetworkResponse response = await NetworkClient.getRequest(
-        url: ApiUrls.recoverVerifyOtpUrl(verifyEmail, verifyPin));
+        url: ApiUrls.recoverVerifyOtpUrl(verifyEmailFromScreen, verifyPin));
 
     pinVerifyInProgress.value = false;
 
     if (response.isSuccess) {
-      Get.snackbar("Success", "OTP Successfully verified",
+      Get.snackbar("Success",
+          "$verifyPin OTP Successfully verified $verifyEmailFromScreen ",
           backgroundColor: Colors.green);
-      //Get.to(() => ResetPasswordScreen(email, verifyPinForNav));
-      Get.to(ResetPasswordScreen(verifyEmail, verifyPin));
+      //Get.to(() => ResetPasswordScreen(verifyEmailFromScreen, verifyPin));
+      //Get.to(ResetPasswordScreen());
+      Get.to(() => NewPasswordReset(), arguments: {
+        'userEmail': verifyEmailFromScreen,
+        'userPin': verifyPin
+      });
     } else {
       showSnackbarMessage(Get.context!, response.errorMessage, true);
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
@@ -10,20 +11,23 @@ import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/utils/api_urls.dart';
 
-class ResetPasswordScreen extends StatefulWidget {
-  final String email;
-  final String verifyPin;
-  const ResetPasswordScreen(this.email, this.verifyPin, {super.key});
+class NewPasswordReset extends StatefulWidget {
+  const NewPasswordReset({super.key});
   @override
-  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+  State<NewPasswordReset> createState() => _NewPasswordResetState();
 }
 
-class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+class _NewPasswordResetState extends State<NewPasswordReset> {
+  final args = Get.arguments as Map<String, dynamic>;
+  late String email = args['userEmail'];
+  late String verifyPin = args['userPin'];
+
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmpasswordController =
       TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   bool _resetPasswordInProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,10 +114,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   void _ontapSinginButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => LoginScreen()),
+    // );
+    Get.offAll(LoginScreen());
   }
 
   void _ontapSubmitButton() {
@@ -132,8 +137,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     _resetPasswordInProgress = true;
     setState(() {});
     Map<String, dynamic> requestBody = {
-      "email": widget.email,
-      "OTP": widget.verifyPin,
+      "email": email,
+      "OTP": verifyPin,
       "password": _passwordController.text.trim()
     };
 
