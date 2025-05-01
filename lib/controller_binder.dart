@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:task_management_app/controller/onboarding_controller/auth_controller.dart';
 import 'package:task_management_app/controller/onboarding_controller/email_verify_controller.dart';
 import 'package:task_management_app/controller/onboarding_controller/registation_controller.dart';
+import 'package:task_management_app/controller/onboarding_controller/reset_password_controller.dart';
 import 'package:task_management_app/controller/task_controller/add_new_task_controller.dart';
 import 'package:task_management_app/controller/task_controller/cancelled_task_controller.dart';
 import 'package:task_management_app/controller/task_controller/complated_task_controller.dart';
@@ -29,5 +30,6 @@ class ControllerBinder extends Bindings {
     Get.put(HomeController());
     Get.put(RegistrationController());
     Get.put(EmailVerifyController());
+    Get.put(ResetPasswordController());
   }
 }

@@ -8,9 +8,7 @@ import 'package:task_management_app/Screenview/onboarding.dart/login_screen.dart
 import 'package:task_management_app/Screenview/style_&_function/style.dart';
 import 'package:task_management_app/const/app_int.dart';
 import 'package:task_management_app/const/app_string.dart';
-import 'package:task_management_app/data/api_services/network_client.dart';
-import 'package:task_management_app/data/api_services/network_response.dart';
-import 'package:task_management_app/data/utils/api_urls.dart';
+import 'package:task_management_app/controller/onboarding_controller/reset_password_controller.dart';
 
 class NewPasswordReset extends StatefulWidget {
   const NewPasswordReset({super.key});
@@ -27,7 +25,8 @@ class _NewPasswordResetState extends State<NewPasswordReset> {
   final TextEditingController _confirmpasswordController =
       TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  bool _resetPasswordInProgress = false;
+  final ResetPasswordController resetPasswordController =
+      Get.find<ResetPasswordController>();
   bool _isObscured = true;
 
   @override
@@ -130,12 +129,14 @@ class _NewPasswordResetState extends State<NewPasswordReset> {
                 SizedBox(
                   height: 15,
                 ),
-                Visibility(
-                  visible: _resetPasswordInProgress == false,
-                  replacement: CenterCircularProgressIndecator(),
-                  child: ElevatedButton(
-                      onPressed: _ontapSubmitButton, child: Text("Submit")),
-                ),
+                GetBuilder<ResetPasswordController>(builder: (controller) {
+                  return Visibility(
+                    visible: controller.resetPasswordInProgress == false,
+                    replacement: CenterCircularProgressIndecator(),
+                    child: ElevatedButton(
+                        onPressed: _ontapSubmitButton, child: Text("Submit")),
+                  );
+                }),
                 SizedBox(
                   height: 25,
                 ),
@@ -171,49 +172,24 @@ class _NewPasswordResetState extends State<NewPasswordReset> {
   }
 
   void _ontapSinginButton() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => LoginScreen()),
-    // );
     Get.offAll(LoginScreen());
   }
 
   void _ontapSubmitButton() {
     if (_formkey.currentState!.validate()) {
-      if (_passwordController.text == _confirmpasswordController.text) {
-        resetPassword();
-      } else {
-        showSnackbarMessage(context, "Password should be same", true);
-      }
+      resetPassword();
     }
-    // Navigator.pushAndRemoveUntil(context,
-    //     MaterialPageRoute(builder: (context) => LoginScreen()), (pre) => false);
   }
 
   Future<void> resetPassword() async {
-    _resetPasswordInProgress = true;
-    setState(() {});
-    Map<String, dynamic> requestBody = {
-      "email": email,
-      "OTP": verifyPin,
-      "password": _passwordController.text.trim()
-    };
-
-    NetworkResponse response = await NetworkClient.postRequest(
-        url: ApiUrls.recoverResetPasswordUrl, body: requestBody);
-    _resetPasswordInProgress = false;
-    setState(() {});
-
-    if (response.isSuccess) {
+    String newPassword = _passwordController.text.trim();
+    bool isSuccess = await resetPasswordController.resetPassword(newPassword);
+    if (isSuccess) {
       SuccessToast("Your password reset successful");
-      Navigator.pushAndRemoveUntil(
-          // ignore: use_build_context_synchronously
-          context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
-          (pre) => false);
+      Get.offAll(LoginScreen());
     } else {
       // ignore: use_build_context_synchronously
-      showSnackbarMessage(context, response.errorMessage, true);
+      showSnackbarMessage(context, resetPasswordController.errorMessage!, true);
     }
   }
 
