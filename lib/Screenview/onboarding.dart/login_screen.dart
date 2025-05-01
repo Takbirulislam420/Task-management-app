@@ -1,9 +1,10 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_management_app/Screenview/Components/background_component.dart';
 import 'package:task_management_app/Screenview/Components/center_circular_progress_indecator.dart';
+import 'package:task_management_app/Screenview/Components/email_text_field_component.dart';
+import 'package:task_management_app/Screenview/Components/login_password_text_field.dart';
 import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/forget_password_verify_email_screen.dart';
 import 'package:task_management_app/Screenview/onboarding.dart/registation_Screen.dart';
@@ -22,10 +23,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
   final LoginController _loginController = Get.find<LoginController>();
-  // To toggle password visibility
-  bool _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -49,66 +49,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 15,
                 ),
-                TextFormField(
-                  textInputAction: TextInputAction.next,
+                EmailTextFieldComponent(
                   controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    //labelText: 'Email',
-                    hintText: AppString.emailHintText,
-                  ),
-                  validator: (String? value) {
-                    String email = value?.trim() ?? '';
-                    if (EmailValidator.validate(email) == false) {
-                      return AppString.emailHintText;
-                    } else {
-                      return null;
-                    }
-                  },
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                TextFormField(
-                  obscureText: _isObscured,
+                LoginPasswordTextField(
                   controller: _passwordController,
-                  keyboardType: TextInputType.visiblePassword,
-                  textInputAction: TextInputAction.done,
-                  textAlign: TextAlign.start,
-                  decoration: InputDecoration(
-                    hintText: AppString.passwordHintText,
-                    // border: OutlineInputBorder(
-                    //   borderRadius: BorderRadius.circular(10),),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 12), // fixes vertical alignment
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.only(
-                          right: 8.0), // optional, for better spacing
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _isObscured = !_isObscured;
-                          });
-                        },
-                        icon: Icon(
-                          _isObscured ? Icons.visibility_off : Icons.visibility,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                    suffixIconConstraints: BoxConstraints(
-                      minHeight: 40,
-                      minWidth: 40,
-                    ),
-                  ),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (String? value) {
-                    if ((value?.isEmpty ?? true) || value!.length < 6) {
-                      return AppString.errorEmailText;
-                    }
-                    return null;
-                  },
                 ),
                 SizedBox(
                   height: 15,
