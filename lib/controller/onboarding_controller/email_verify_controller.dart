@@ -1,60 +1,32 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:task_management_app/const/app_string.dart';
 import 'package:task_management_app/data/api_services/network_client.dart';
 import 'package:task_management_app/data/api_services/network_response.dart';
 import 'package:task_management_app/data/utils/api_urls.dart';
-import 'package:task_management_app/Screenview/Components/show_snackbar.dart';
-import 'package:task_management_app/Screenview/onboarding.dart/forget_password_pin_verification_screen.dart';
 
 class EmailVerifyController extends GetxController {
-  final emailController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  bool _emailVerifyInProgress = false;
+  String? _errorMessage;
 
-  var isLoading = false.obs;
+  bool get emailVerifyInProgress => _emailVerifyInProgress;
+  String? get errorMessage => _errorMessage;
 
-  String? validateEmail(String? value) {
-    String email = value?.trim() ?? '';
-    if (!EmailValidator.validate(email)) {
-      return AppString.enterValidEmail;
-    }
-    return null;
-  }
-
-  void submitEmail() {
-    if (formKey.currentState!.validate()) {
-      verifyEmail();
-    }
-  }
-
-  Future<void> verifyEmail() async {
-    isLoading.value = true;
-    String userEmail = emailController.text.trim();
-
+  Future<bool> getEmailVerify(inputEmail) async {
+    bool isSuccess = false;
+    _emailVerifyInProgress = true;
+    update();
+    //start
     NetworkResponse response =
-        await NetworkClient.getRequest(url: ApiUrls.emailVerifyUrl + userEmail);
-    isLoading.value = false;
-
+        await NetworkClient.getRequest(url: ApiUrls.emailVerifyUrl(inputEmail));
     if (response.isSuccess) {
-      Get.snackbar(
-        AppString.successText,
-        AppString.sendOtpText,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.black,
-        colorText: Colors.white,
-      );
-      Get.to(() => ForgetPasswordPinVerificationScreen(),
-          arguments: {'userEmail': userEmail});
-      // Get.delete<EmailVerifyController>();
+      isSuccess = true;
+      _errorMessage = null;
     } else {
-      showSnackbarMessage(Get.context!, response.errorMessage, true);
+      _errorMessage = response.errorMessage;
     }
-  }
+    //end
 
-  @override
-  void onClose() {
-    emailController.dispose();
-    super.onClose();
+    _emailVerifyInProgress = false;
+    update();
+    return isSuccess;
   }
 }

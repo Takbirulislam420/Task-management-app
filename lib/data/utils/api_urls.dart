@@ -7,7 +7,9 @@ class ApiUrls {
   static final String createTaskUrl = "$_baseUrls/createTask";
   static final String taskStatusCountUrl = "$_baseUrls/taskStatusCount";
   static final String newTaskListUrl = "$_baseUrls/listTaskByStatus/New";
-  static final String emailVerifyUrl = "$_baseUrls/RecoverVerifyEmail/";
+  //static final String emailVerifyUrl = "$_baseUrls/RecoverVerifyEmail/";
+  static String emailVerifyUrl(String email) =>
+      "$_baseUrls/RecoverVerifyEmail/$email";
   static String recoverVerifyOtpUrl(String email, String verifyPin) =>
       "$_baseUrls/RecoverVerifyOtp/$email/$verifyPin";
   static String updateStatusTaskUrl(String taskId, String status) =>
